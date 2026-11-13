@@ -1,6 +1,6 @@
 """Consultas rápidas sobre a base (tipologia × mês), sem gerar relatório."""
 import numpy as np, pandas as pd
-from motor import dist_km
+from motor import dist_km, estoque_corrigido
 
 
 def empreendimentos(d, lat, lon, raio_km, area_min=None, area_max=None, dorms=None, finalidade='Residencial',
@@ -16,6 +16,7 @@ def empreendimentos(d, lat, lon, raio_km, area_min=None, area_max=None, dorms=No
     e['km'] = dist_km(e.lat, e.lon, lat, lon)
     e = e[e.km <= raio_km]
     x = x[x.BID.isin(e.index)]
+    if len(x): x = x.join(estoque_corrigido(x))  # vendas = queda do estoque corrigido (recargas do Órulo neutralizadas)
     fim = d.mes.max()
     out = []
     for bid, z in x.groupby('BID'):
@@ -32,10 +33,11 @@ def empreendimentos(d, lat, lon, raio_km, area_min=None, area_max=None, dorms=No
              'areas_m2': sorted({round(float(a), 2) for a in z['APRIV TIPOLOGIA'].dropna()}),
              'ultimo_mes': z.mes.max().strftime('%Y-%m'),
              'estoque': int(ult['ESTOQUE TIPOLOGIA'].sum()) if z.mes.max() == fim else 0}
+        if z.neut.any(): r['recargas_orulo'] = sorted({m.strftime('%Y-%m') for m in z[z.neut.astype(bool)].mes})
         for n in (3, 12):
             j = z[z.mes > fim - pd.DateOffset(months=n)]
-            v = float((j.Vendas_qtd.fillna(0) - j.Distratos_qtd.fillna(0)).sum())
-            o = float(j['Estoque no mes anterior'].fillna(0).sum())
+            v = float((j.ant_c - j.est_c).fillna(0).sum())
+            o = float(j.ant_c.fillna(0).sum())
             r[f'vendas_{n}m'] = int(v)
             r[f'vso_mensal_{n}m'] = round(v / o, 4) if o else None
         m2 = (ult['ESTOQUE TIPOLOGIA'] * ult['APRIV TIPOLOGIA'])[ult.VGV.notna()].sum()
