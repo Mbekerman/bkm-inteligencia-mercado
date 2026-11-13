@@ -77,11 +77,15 @@ def _chaves():
     except ValueError: return {}
 
 
-def _chave(req):
-    """A chave do pedido: Authorization (com ou sem "Bearer ", como vier colada) ou X-API-Key."""
-    a = (req.headers.get('authorization') or req.headers.get('x-api-key') or '').strip()
-    if a.lower().startswith('bearer '): a = a[7:].strip()
-    return a
+def _chaves_do_pedido(req):
+    """Candidatas a chave: Authorization (com ou sem "Bearer ") e X-API-Key. Vale a que conferir: alguns
+    clientes (o conector do claude.ai) põem o próprio Authorization e a nossa chave vai no X-API-Key."""
+    out = []
+    for h in ('x-api-key', 'authorization'):
+        a = (req.headers.get(h) or '').strip()
+        if a.lower().startswith('bearer '): a = a[7:].strip()
+        if a: out.append(a)
+    return out
 
 
 def cliente(chave):
@@ -198,8 +202,9 @@ ABERTAS = ('/saude', '/relatorios/')
 @app.middleware('http')
 async def autenticar(req: Request, prox):
     if not req.url.path.startswith(ABERTAS):
-        chave = _chave(req)
-        quem = cliente(chave)
+        cands = _chaves_do_pedido(req)
+        quem = next((q for q in map(cliente, cands) if q), None)
+        chave = cands[0] if cands else ''
         if not quem:
             # diagnóstico sem expor a chave: se veio, de que jeito e com quantos caracteres
             print(json.dumps({'severity': 'WARNING', 'auth': 'recusada', 'caminho': req.url.path,
