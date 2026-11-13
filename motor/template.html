@@ -1,0 +1,272 @@
+<title>__TITULO__</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: relatório vertical; cada métrica numa faixa com 3 km e 5 km lado a lado */
+:root{
+  --bg:#ffffff; --fg:#1d2e5c; --muted:#5a5f68; --line:#dfe2e8; --soft:#f3f6fb; --pill:#e4ebf8;
+  --c1:#0094fe; --c2:#863d8f; --c3:#c67355; --incc:#5a5f68; --zero:#9aa0aa;
+  --s1:#1d2e5c; --s2:#0094fe; --s3:#c67355; --s4:#7d8a3e; --c4:#7d8a3e; --c5:#e0a100; --tipbg:#1d2e5c; --tipfg:#ffffff;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10172b; --fg:#e8ecf6; --muted:#a9b0c0; --line:#2a3350; --soft:#172040; --pill:#23315e;
+  --c1:#3aa9ff; --c2:#c07ac9; --c3:#e0977b; --incc:#a9b0c0; --zero:#6b7388;
+  --s1:#e8ecf6; --s2:#3aa9ff; --s3:#e0977b; --s4:#b5c46a; --c4:#b5c46a; --c5:#f2c14e; --tipbg:#e8ecf6; --tipfg:#10172b; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10172b; --fg:#e8ecf6; --muted:#a9b0c0; --line:#2a3350; --soft:#172040; --pill:#23315e;
+  --c1:#3aa9ff; --c2:#c07ac9; --c3:#e0977b; --incc:#a9b0c0; --zero:#6b7388;
+  --s1:#e8ecf6; --s2:#3aa9ff; --s3:#e0977b; --s4:#b5c46a; --c4:#b5c46a; --c5:#f2c14e; --tipbg:#e8ecf6; --tipfg:#10172b; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:15px;line-height:1.45;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+.wrap{max-width:1600px;margin:0 auto;display:flex;flex-direction:column;gap:48px}
+h1{font-size:clamp(28px,4vw,44px);font-weight:600;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font-size:24px;font-weight:600;margin:0;text-wrap:balance}
+h3{font-size:15px;font-weight:600;margin:0}
+.sub{color:var(--muted);margin:6px 0 0}
+.def{color:var(--muted);margin:4px 0 0;font-size:14px;max-width:110ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:16px}
+.lg{display:flex;align-items:center;gap:8px;font-weight:500}
+.sq{width:14px;height:14px;border-radius:3px;flex:none}
+.ln{width:26px;height:0;border-top:3px solid currentColor;flex:none}
+.ln.d{border-top-style:dashed}.ln.o{border-top-style:dotted}
+section{display:flex;flex-direction:column;gap:16px;border-top:1px solid var(--line);padding-top:28px}
+.grid2{display:grid;grid-template-columns:repeat(var(--nr,2),minmax(0,1fr));gap:40px}
+@media (max-width:1100px){.grid2{grid-template-columns:1fr}}
+.grid2.um{grid-template-columns:1fr}
+.col{min-width:0;display:flex;flex-direction:column;gap:14px}
+.raio{display:inline-block;align-self:flex-start;background:var(--pill);color:var(--fg);font-weight:600;border-radius:999px;padding:3px 12px;font-size:14px}
+.chart{width:100%;position:relative}
+.chart svg{display:block;overflow:visible}
+.mini{display:flex;flex-direction:column;gap:6px}
+.mini .t{display:flex;align-items:center;gap:8px;font-weight:600;font-size:14px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums;font-size:13px}
+th,td{padding:5px 8px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500}
+th:first-child,td:first-child{text-align:left}
+td .k{display:inline-flex;align-items:center;gap:6px}
+.grp th{color:var(--fg);font-weight:600;text-align:center;border-bottom:2px solid var(--line)}
+.cards{display:grid;grid-template-columns:repeat(var(--nc,3),minmax(0,1fr));gap:16px}
+@media (max-width:900px){.cards{grid-template-columns:1fr}}
+.card{border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .top{height:4px;border-radius:4px;margin:-6px 0 4px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+details{font-size:13px} summary{cursor:pointer;color:var(--muted);font-weight:500}
+summary:focus-visible{outline:2px solid var(--c1);outline-offset:2px}
+.elist{margin:8px 0 0;padding:0;list-style:none;columns:2;column-gap:20px}
+.elist li{break-inside:avoid;padding:2px 0;display:flex;justify-content:space-between;gap:8px}
+.elist .m{color:var(--muted)}
+.dl{display:grid;grid-template-columns:200px 1fr;gap:10px 24px;max-width:1100px}
+@media (max-width:640px){.dl{grid-template-columns:1fr;gap:2px}.dl dd{margin-bottom:10px}.elist{columns:1}}
+.dl dt{font-weight:600}.dl dd{margin:0}
+#tip{position:fixed;z-index:20;pointer-events:none;background:var(--tipbg);color:var(--tipfg);border-radius:8px;padding:10px 12px;font-size:13px;line-height:1.4;max-width:360px;box-shadow:0 4px 16px rgba(0,0,0,.18)}
+#tip b{font-weight:600}
+#tip .r{display:flex;align-items:center;gap:8px;justify-content:space-between}
+#tip .r span:last-child{font-variant-numeric:tabular-nums;font-weight:600}
+#tip .h{font-weight:600;margin-bottom:4px}
+#tip .n{opacity:.8;font-size:12px;margin:2px 0 6px 22px}
+.topo{position:sticky;top:env(safe-area-inset-top,0px);z-index:15;background:#1d2e5c;color:#ffffff;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));margin-top:-32px;
+  padding-block:12px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.topo .in{max-width:1600px;margin:0 auto;display:flex;align-items:center;gap:20px}
+.topo .logo{height:34px;width:auto;flex:none;display:block}
+.topo .sep{width:1px;height:28px;background:rgba(255,255,255,.35)}
+.topo .tt{font-size:18px;font-weight:600;letter-spacing:.01em}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:16;background:#1d2e5c}
+.foot{color:var(--muted);font-size:13px}
+.susp{color:var(--warn,#b3261e);font-size:12px;white-space:nowrap}
+</style>
+
+<div class="topo"><div class="in"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="logo" aria-label="BKM" role="img" viewBox="212.64 214.64 1494.72 650.72"> <defs> <clipPath id="clip-0"> <path clip-rule="nonzero" d="M 1112 414 L 1220 414 L 1220 809 L 1112 809 Z M 1112 414 "></path> </clipPath> <clipPath id="clip-1"> <path clip-rule="nonzero" d="M 1142.660156 414.980469 L 1112.050781 414.980469 L 1112.050781 808.027344 L 1163.691406 808.027344 C 1194.265625 808.027344 1219.144531 785.636719 1219.144531 758.121094 L 1219.144531 464.886719 C 1219.144531 437.371094 1194.265625 414.980469 1163.691406 414.980469 Z M 1142.660156 414.980469 "></path> </clipPath> <clipPath id="clip-2"> <path clip-rule="nonzero" d="M 796 414 L 1115 414 L 1115 809 L 796 809 Z M 796 414 "></path> </clipPath> <clipPath id="clip-3"> <path clip-rule="nonzero" d="M 955.878906 441.085938 L 861.003906 542.710938 L 796.359375 612.085938 L 955.878906 781.910156 C 976.394531 802.308594 995.820312 808.050781 1018.859375 808.011719 L 1018.859375 808.027344 L 1114.910156 808.027344 L 1051.210938 742.804688 L 931.222656 614.398438 L 928.511719 611.496094 L 931.222656 608.59375 L 1051.210938 480.191406 L 1114.910156 414.980469 L 1018.859375 414.980469 C 1018.789062 414.980469 1018.714844 414.980469 1018.644531 414.980469 C 995.699219 414.980469 976.332031 420.746094 955.878906 441.085938 "></path> </clipPath> </defs> <path fill-rule="nonzero" fill="#ffffff" fill-opacity="1" d="M 541.375 701.183594 C 487.988281 727.230469 422.203125 707.757812 394.429688 657.683594 C 366.660156 607.605469 387.425781 545.898438 440.808594 519.847656 C 494.191406 493.800781 559.980469 513.277344 587.75 563.351562 C 615.523438 613.425781 594.757812 675.136719 541.375 701.183594 M 555.328125 417.734375 C 491.824219 398.933594 425.941406 409.4375 374.234375 441.140625 L 374.234375 270.441406 L 328.351562 270.441406 C 295.363281 270.441406 268.523438 295.09375 268.523438 325.386719 L 268.523438 751.800781 C 268.523438 782.09375 295.363281 806.746094 328.351562 806.746094 L 374.234375 806.746094 L 374.234375 776.136719 C 390.191406 785.921875 407.78125 793.894531 426.855469 799.539062 C 539.257812 832.816406 659.136719 774.324219 694.613281 668.890625 C 730.089844 563.457031 667.730469 451.011719 555.328125 417.734375 "></path> <path fill-rule="nonzero" fill="#ffffff" fill-opacity="1" d="M 1537.542969 417.476562 C 1496.03125 405.6875 1451.910156 409.148438 1413.300781 427.226562 C 1400.601562 433.171875 1389.027344 440.488281 1378.707031 448.925781 C 1362.164062 435.683594 1342.492188 425.367188 1320.535156 419.132812 C 1279.535156 407.484375 1235.929688 410.902344 1197.777344 428.765625 C 1159.625 446.625 1131.484375 476.789062 1118.539062 513.699219 L 1219.074219 563.710938 C 1218.085938 545.210938 1228.769531 526.984375 1248.199219 517.816406 C 1274.894531 505.226562 1307.878906 514.492188 1321.867188 538.515625 C 1326.582031 546.605469 1328.476562 555.332031 1327.984375 563.835938 L 1328.347656 808.027344 L 1378.707031 808.027344 C 1409.277344 808.027344 1434.15625 787.6875 1434.15625 762.6875 L 1434.394531 563.75 C 1433.390625 544.996094 1444.222656 526.523438 1463.917969 517.230469 C 1490.976562 504.46875 1524.40625 513.859375 1538.589844 538.214844 C 1542.089844 544.222656 1544.046875 550.582031 1544.648438 556.941406 L 1544.648438 808.027344 L 1595.007812 808.027344 C 1625.582031 808.027344 1650.460938 787.6875 1650.460938 762.6875 L 1651.433594 560.574219 C 1653.058594 495.816406 1606.253906 436.996094 1537.542969 417.476562 "></path> <g clip-path="url(#clip-0)"> <g clip-path="url(#clip-1)"> <path fill-rule="nonzero" fill="#ffffff" d="M 1219.144531 414.980469 L 1112.050781 414.980469 L 1112.050781 808.027344 L 1219.144531 808.027344 Z M 1219.144531 414.980469 "></path> </g> </g> <g clip-path="url(#clip-2)"> <g clip-path="url(#clip-3)"> <path fill-rule="nonzero" fill="#ffffff" d="M 796.359375 414.980469 L 796.359375 808.050781 L 1114.910156 808.050781 L 1114.910156 414.980469 Z M 796.359375 414.980469 "></path> </g> </g> <path fill-rule="nonzero" fill="#ffffff" fill-opacity="1" d="M 786.292969 270.441406 L 781.035156 270.441406 C 751.289062 270.441406 727.085938 294.644531 727.085938 324.390625 L 727.085938 755.609375 C 727.085938 785.355469 751.289062 809.558594 781.035156 809.558594 L 822.410156 809.558594 L 822.410156 270.441406 Z M 786.292969 270.441406 "></path> </svg><span class="sep"></span><span class="tt">Inteligência de Mercado - BKM</span></div></div>
+<div class="wrap" style="margin-top:32px">
+<header>
+  <h1 id="h1"></h1>
+  <p class="sub" id="sub"></p>
+  <div class="legend" id="legenda"></div>
+</header>
+
+<section id="recortes">
+  <h2>Recortes</h2>
+  <dl class="dl" id="rec"></dl>
+</section>
+
+<section id="cenarios">
+  <h2>Cenários</h2>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section id="lanc"><h2>Lançamentos</h2><p class="def">Unidades lançadas por semestre. Passe o mouse para ver os empreendimentos.</p><div class="grid2" data-r></div></section>
+<section id="oferta"><h2>Unidades à venda, vendas e estoque</h2><p class="def">Linha cheia: à venda no semestre (estoque inicial + lançadas). Tracejada: vendidas no semestre, líquidas de distratos. Barra: estoque no fim do semestre. Escala comum a todos os gráficos.</p><div class="grid2" data-r></div></section>
+<section id="preco"><h2>Preço nominal × INCC</h2><p class="def">R$/m² médio das unidades vendidas no semestre, ponderado pela área vendida. Tracejada: o R$/m² do primeiro semestre corrigido pelo INCC-M. Escala comum; o eixo não começa em zero.</p><div class="grid2" data-r></div></section>
+<section id="pct"><h2>Ajuste de preço × INCC</h2><p class="def">Variação acumulada desde o primeiro semestre do R$/m² de tabela do estoque, nos mesmos empreendimentos de um semestre para o outro. Na tabela, entre parênteses, a variação no semestre.</p><div class="grid2" data-r></div></section>
+<section id="vso"><h2>VSO por semestre</h2><p class="def">Vendas líquidas ÷ oferta, somadas mês a mês dentro do semestre.</p><div class="grid2" data-r></div></section>
+<section id="indice"><h2>Índice de velocidade ajustado pela idade</h2><p class="def">Vendas do semestre ÷ vendas esperadas pela idade do estoque, usando o VSO de cada faixa de idade (0–6, 7–12, 13–24 e 25+ meses) do próprio cenário. 1,0 = ritmo médio do cenário.</p><div class="grid2" data-r></div></section>
+<section id="curvas"><h2>Curva de venda por idade</h2><p class="def">% vendido acumulado por safra de lançamento, somando as unidades da safra. A curva vai até onde há dados de pelo menos 75% das unidades da safra.</p><div class="grid2" data-r></div></section>
+<section id="tabela"><h2>Venda por idade</h2><p class="def">% vendido no fim de cada janela de idade; R$/m² médio vendido dentro da janela, nominal e corrigido pelo INCC-M até o último mês da base.</p><div class="grid2 um" data-r></div></section>
+
+<p class="foot" id="foot"></p>
+</div>
+<div id="tip" hidden></div>
+
+<script>
+const RES = __DATA__;
+const META=RES.meta, D=RES.dados;
+const SC=META.cenarios.map(c=>c.id);
+const NOME=META.cenarios.map((c,i)=>`${i+1} · ${c.nome}`);
+const COR=['var(--c1)','var(--c2)','var(--c3)','var(--c4)','var(--c5)'].slice(0,SC.length);
+const RAIOS=META.raios;
+const SAF=[...new Set(Object.values(D).flatMap(x=>x.safras_lista))].sort();
+const SCOR=['var(--s1)','var(--s2)','var(--s3)','var(--s4)'], SDASH=['','8 5','2 4','12 4 2 4'], SCLS=['','d','o',''];
+const CAT=META.sem;
+document.documentElement.style.setProperty('--nr',RAIOS.length);
+document.documentElement.style.setProperty('--nc',Math.min(3,SC.length));
+const NS='http://www.w3.org/2000/svg';
+const nf0=new Intl.NumberFormat('pt-BR',{maximumFractionDigits:0});
+const f0=v=>v==null?'–':nf0.format(v);
+const fp=(v,d=1,s=false)=>v==null?'–':(s&&v>0?'+':'')+(v*100).toLocaleString('pt-BR',{minimumFractionDigits:d,maximumFractionDigits:d})+'%';
+const f2=v=>v==null?'–':v.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const g=(k,r)=>D[k+'_'+r];
+
+// ---------- tooltip
+const tip=document.getElementById('tip');
+function showTip(html,ev){tip.innerHTML=html;tip.hidden=false;
+  const w=tip.offsetWidth,h=tip.offsetHeight;let x=ev.clientX+16,y=ev.clientY+16;
+  if(x+w>innerWidth-8)x=ev.clientX-w-16; if(y+h>innerHeight-8)y=Math.max(8,ev.clientY-h-16);
+  tip.style.left=x+'px';tip.style.top=y+'px';}
+function hideTip(){tip.hidden=true}
+const row=(sw,lbl,val)=>`<div class="r"><span class="k" style="display:flex;align-items:center;gap:6px">${sw}${esc(lbl)}</span><span>${val}</span></div>`;
+const swSq=c=>`<span class="sq" style="background:${c};width:12px;height:12px"></span>`;
+const swLn=(c,cls='')=>`<span class="ln ${cls}" style="color:${c};width:20px"></span>`;
+
+// ---------- svg helpers
+function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(parent)parent.appendChild(e);return e}
+function txt(p,x,y,s,o={}){const t=el('text',{x,y,'font-size':o.size||12,fill:o.fill||'var(--muted)','text-anchor':o.anchor||'middle','font-weight':o.w||400,'font-family':'inherit'},p);t.textContent=s;return t}
+function ticks(lo,hi,n=5){const raw=(hi-lo)/n,m=Math.pow(10,Math.floor(Math.log10(raw)));const st=[1,2,2.5,5,10].map(k=>k*m).reduce((a,b)=>Math.abs(b-raw)<Math.abs(a-raw)?b:a);
+  const out=[];for(let a=Math.ceil(lo/st-1e-9)*st;a<=hi+1e-9;a+=st)out.push(+a.toFixed(10));return out}
+function path(pts){return pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join('')}
+
+// base frame: categories on x, numeric y. returns {svg,X,Y,bw}
+function frame(host,{h=240,lo,hi,yfmt,ml=52,mr=10,mt=12,mb=30,cats=CAT,grid=true,xlab=true}){
+  host.innerHTML='';const W=Math.max(280,host.clientWidth);const svg=el('svg',{width:W,height:h,viewBox:`0 0 ${W} ${h}`,role:'img'},host);
+  const pw=W-ml-mr,ph=h-mt-mb,n=cats.length,bw=pw/n;
+  const X=i=>ml+bw*(i+.5),Y=v=>mt+ph*(1-(v-lo)/(hi-lo));
+  if(grid)for(const t of ticks(lo,hi,4)){el('line',{x1:ml,x2:W-mr,y1:Y(t),y2:Y(t),stroke:Math.abs(t)<1e-9?'var(--zero)':'var(--line)','stroke-width':1},svg);txt(svg,ml-8,Y(t)+4,yfmt(t),{anchor:'end'})}
+  if(xlab)cats.forEach((c,i)=>txt(svg,X(i),h-10,c));
+  return {svg,X,Y,bw,W,h,ml,mr,mt,ph,n};
+}
+// hover columns
+function hover(f,tipFn,cross=true){
+  const line=cross?el('line',{x1:0,x2:0,y1:f.mt,y2:f.mt+f.ph,stroke:'var(--muted)','stroke-width':1,'stroke-dasharray':'3 3',opacity:0},f.svg):null;
+  for(let i=0;i<f.n;i++){const r=el('rect',{x:f.X(i)-f.bw/2,y:0,width:f.bw,height:f.h,fill:'transparent',style:'cursor:crosshair'},f.svg);
+    r.addEventListener('mousemove',ev=>{if(line){line.setAttribute('x1',f.X(i));line.setAttribute('x2',f.X(i));line.setAttribute('opacity',.6)}showTip(tipFn(i),ev)});
+    r.addEventListener('mouseleave',()=>{if(line)line.setAttribute('opacity',0);hideTip()});}
+}
+function lines(f,series){ // series:[{v:[],c,dash,dots}]
+  for(const s of series){const pts=s.v.map((v,i)=>v==null?null:[f.X(i),f.Y(v)]).filter(Boolean);
+    el('path',{d:path(pts),fill:'none',stroke:s.c,'stroke-width':s.w||2.5,'stroke-dasharray':s.dash||'','stroke-linejoin':'round'},f.svg);
+    if(s.dots!==false)pts.forEach(p=>el('circle',{cx:p[0],cy:p[1],r:4,fill:s.hollow?'var(--bg)':s.c,stroke:s.hollow?s.c:'var(--bg)','stroke-width':2},f.svg));}
+}
+function bar(f,x,v,w,c){const y0=f.Y(0),y1=f.Y(v);const top=Math.min(y0,y1),hh=Math.abs(y0-y1);if(hh<.5)return;
+  el('rect',{x:x-w/2,y:top,width:w,height:hh,rx:Math.min(3,w/2),fill:c},f.svg)}
+
+// ---------- table
+function table(host,head,rows,grp){const d=document.createElement('div');d.className='tbl';
+  d.innerHTML=`<table>${grp||''}<tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;host.appendChild(d)}
+const kSq=i=>`<span class="k"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</span>`;
+
+// ---------- columns
+const renders=[];
+function cols(sec,fn){const box=document.querySelector(`#${sec} [data-r]`);for(const r of RAIOS){const c=document.createElement('div');c.className='col';
+  c.innerHTML=`<span class="raio">Raio ${r} km</span>`;box.appendChild(c);fn(c,r)}}
+function chartDiv(parent){const d=document.createElement('div');d.className='chart';parent.appendChild(d);return d}
+function reg(div,draw){renders.push([div,draw]);draw()}
+
+const maxOf=(fn)=>Math.max(...RAIOS.flatMap(r=>SC.flatMap(s=>fn(g(s,r)))));
+const minOf=(fn)=>Math.min(...RAIOS.flatMap(r=>SC.flatMap(s=>fn(g(s,r)))));
+
+// legenda e cartões
+document.getElementById('legenda').innerHTML=NOME.map((n,i)=>`<span class="lg"><span class="sq" style="background:${COR[i]}"></span>${n}</span>`).join('')+`<span class="lg" style="color:var(--incc)"><span class="ln d"></span><span style="color:var(--fg)">INCC-M</span></span>`;
+document.getElementById('h1').textContent=META.titulo;
+document.getElementById('sub').textContent=META.subtitulo;
+document.getElementById('rec').innerHTML=META.recortes.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
+document.getElementById('foot').textContent=`Fonte: Órulo, relatório de tipologias mês a mês, ${META.periodo}. INCC-M: FGV. Gerado em ${META.gerado}.`;
+const RMIN=Math.min(...RAIOS), RMAX=Math.max(...RAIOS);
+document.getElementById('cards').innerHTML=META.cenarios.map((c,i)=>{const s=c.id;const emin=new Set(g(s,RMIN).emps);const L=g(s,RMAX).emps_det;
+  return `<div class="card"><div class="top" style="background:${COR[i]}"></div><h3 style="font-size:18px">${esc(NOME[i])}</h3>
+  <dl class="kv"><dt>Pin</dt><dd>${esc(c.pin)}</dd><dt>Sombra</dt><dd>${c.sombras.map(esc).join('<br>')}</dd>
+  <dt>Empreendimentos</dt><dd>${RAIOS.map(r=>`<b>${c.n[r]}</b> em ${r} km`).join(' · ')}</dd></dl>
+  <details><summary>Ver empreendimentos${RAIOS.length>1?` (● = também no raio de ${RMIN} km)`:''}</summary><ul class="elist">${L.map(x=>`<li><span>${RAIOS.length>1&&emin.has(x.emp)?'● ':''}${esc(x.emp)}${x.conf==='suspeito'?` <span class="susp" title="Órulo: ${x.conf_orulo} un. no prédio; processo ${esc(x.conf_proc)}: ${x.conf_processo} un.">⚠ suspeito</span>`:''}</span><span class="m">${x.lanc} · ${x.unid} un.</span></li>`).join('')}</ul></details>${(()=>{const S=L.filter(x=>x.conf==='suspeito');return S.length?`<p class="m" style="margin-top:8px">⚠ ${S.length} empreendimento(s) com mais unidades no Órulo do que no processo de licenciamento da prefeitura (folga de 5%). Continuam no cálculo até a conferência manual.</p>`:''})()}</div>`}).join('');
+
+// 1 lançamentos
+{const hi=maxOf(d=>d.lanc.map(x=>x.unid))*1.08;
+cols('lanc',(c,r)=>{const div=chartDiv(c);reg(div,()=>{const f=frame(div,{h:280,lo:0,hi,yfmt:f0});
+  const w=Math.min(26,f.bw/(SC.length+1));SC.forEach((s,i)=>g(s,r).lanc.forEach((x,j)=>bar(f,f.X(j)+(i-(SC.length-1)/2)*(w+3),x.unid,w,COR[i])));
+  hover(f,j=>`<div class="h">${CAT[j]} · raio ${r} km</div>`+SC.map((s,i)=>{const x=g(s,r).lanc[j];return row(swSq(COR[i]),NOME[i],`${f0(x.unid)} un. · ${x.emps} emp.`)+(x.nomes.length?`<div class="n">${x.nomes.map(esc).join('<br>')}</div>`:'')}).join(''),false)});
+  table(c,['',...CAT],SC.map((s,i)=>[kSq(i),...g(s,r).lanc.map(x=>`${f0(x.unid)} <span style="color:var(--muted)">· ${x.emps}</span>`)]))})}
+
+// 2 oferta
+{const hi=maxOf(d=>d.sem.map(x=>x.a_venda))*1.05, lo=Math.min(0,minOf(d=>d.sem.map(x=>x.vendidas)));
+cols('oferta',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.className='mini';m.innerHTML=`<div class="t"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</div>`;c.appendChild(m);
+  const d=g(s,r).sem;const div=chartDiv(m);reg(div,()=>{const f=frame(div,{h:200,lo,hi,yfmt:f0});
+    d.forEach((x,j)=>bar(f,f.X(j),x.estoque_fim,Math.min(34,f.bw*.5),COR[i]));
+    lines(f,[{v:d.map(x=>x.a_venda),c:'var(--fg)'},{v:d.map(x=>x.vendidas),c:'var(--fg)',dash:'7 5',hollow:true}]);
+    hover(f,j=>{const x=d[j];return `<div class="h">${NOME[i]} · ${CAT[j]} · ${r} km</div>`+row(swLn('var(--fg)'),'À venda',f0(x.a_venda))+row(swLn('var(--fg)','d'),'Vendidas',f0(x.vendidas))+row(swSq(COR[i]),'Estoque no fim',f0(x.estoque_fim))+row('','VSO do semestre',fp(x.vso))+row('','Vendas por mês',f0(x.vend_mes))+row('','Empreendimentos com oferta',x.emps)})});
+  table(m,['',...CAT],[[ 'À venda',...d.map(x=>f0(x.a_venda))],['Vendidas',...d.map(x=>f0(x.vendidas))],['Estoque no fim',...d.map(x=>f0(x.estoque_fim))]]);}))}
+
+// 3 preço nominal
+{const vals=RAIOS.flatMap(r=>SC.flatMap(s=>g(s,r).sem.flatMap(x=>[x.rs_m2_vendido,g(s,r).sem[0].rs_m2_vendido*x.incc_idx/100])));
+const lo=Math.min(...vals)*.97,hi=Math.max(...vals)*1.02;
+cols('preco',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.className='mini';m.innerHTML=`<div class="t"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</div>`;c.appendChild(m);
+  const d=g(s,r).sem,b=d[0].rs_m2_vendido,inc=d.map(x=>b*x.incc_idx/100);const div=chartDiv(m);
+  reg(div,()=>{const f=frame(div,{h:190,lo,hi,yfmt:v=>f0(v)});lines(f,[{v:inc,c:'var(--incc)',dash:'7 5',dots:false},{v:d.map(x=>x.rs_m2_vendido),c:COR[i]}]);
+    hover(f,j=>`<div class="h">${NOME[i]} · ${CAT[j]} · ${r} km</div>`+row(swLn(COR[i]),'R$/m² vendido','R$ '+f0(d[j].rs_m2_vendido))+row(swLn('var(--incc)','d'),'1S24 corrigido pelo INCC','R$ '+f0(inc[j]))+row('','Diferença',fp(d[j].rs_m2_vendido/inc[j]-1,1,true))+row('','Unidades vendidas',f0(d[j].vendidas)))});
+  table(m,['',...CAT],[[`<span class="k">${swLn(COR[i])}R$/m² vendido</span>`,...d.map(x=>f0(x.rs_m2_vendido))],[`<span class="k">${swLn('var(--incc)','d')}INCC</span>`,...inc.map(f0)]]);}))}
+
+// series overlay helper
+function overlay(sec,key,{lo,hi,yfmt,cellfmt,tipRows,ref,incc}){
+  cols(sec,(c,r)=>{const div=chartDiv(c);const S=SC.map(s=>g(s,r).sem.map(x=>x[key]));const I=incc?incc(r):null;
+    reg(div,()=>{const f=frame(div,{h:300,lo,hi,yfmt});
+      if(ref!=null)el('line',{x1:f.ml,x2:f.W-f.mr,y1:f.Y(ref),y2:f.Y(ref),stroke:'var(--fg)','stroke-width':1.5,'stroke-dasharray':'2 4'},f.svg);
+      const ser=[];if(I)ser.push({v:I,c:'var(--incc)',dash:'7 5',dots:false});[...SC.keys()].reverse().forEach(i=>ser.push({v:S[i],c:COR[i],w:i==0?3:2.5}));lines(f,ser);
+      hover(f,j=>`<div class="h">${CAT[j]} · raio ${r} km</div>`+SC.map((s,i)=>tipRows(g(s,r).sem,j,i)).join('')+(I?row(swLn('var(--incc)','d'),'INCC-M',fp(I[j],1,true)):''))});
+    const rows=SC.map((s,i)=>[kSq(i),...S[i].map((v,j)=>cellfmt(v,j,S[i]))]);
+    if(I)rows.push([`<span class="k">${swLn('var(--incc)','d')}INCC-M</span>`,...I.map((v,j)=>cellfmt(v,j,I))]);
+    table(c,['',...CAT],rows)})}
+
+// 4 pct
+for(const s of SC)for(const r of RAIOS)g(s,r).sem.forEach(x=>x.ac=x.idx_mesmos==null?null:x.idx_mesmos/100-1);
+overlay('pct','ac',{lo:Math.min(0,minOf(d=>d.sem.map(x=>x.ac??0))),hi:Math.max(.05,maxOf(d=>d.sem.map(x=>Math.max(x.ac??0,x.incc_idx/100-1))))*1.1,yfmt:v=>fp(v,0,true),incc:r=>g(SC[0],r).sem.map(x=>x.incc_idx/100-1),
+  cellfmt:(v,j,a)=>v==null?'–':fp(v,1,true)+(j?` <span style="color:var(--muted)">(${fp((1+v)/(1+a[j-1])-1,1,true)})</span>`:''),
+  tipRows:(d,j,i)=>row(swSq(COR[i]),NOME[i],d[j].ac==null?'–':fp(d[j].ac,1,true)+(j?` (${fp((1+d[j].ac)/(1+d[j-1].ac)-1,1,true)} no sem.)`:''))+(j?`<div class="n">${d[j].n_comuns} empreendimentos comparáveis</div>`:'')});
+// 5 vso
+overlay('vso','vso',{lo:Math.min(0,minOf(d=>d.sem.map(x=>x.vso??0)))-.02,hi:maxOf(d=>d.sem.map(x=>x.vso??0))*1.1+.01,yfmt:v=>fp(v,0),cellfmt:v=>fp(v),
+  tipRows:(d,j,i)=>row(swSq(COR[i]),NOME[i],fp(d[j].vso))+`<div class="n">${f0(d[j].vendidas)} vendidas · oferta média ${f0(d[j].oferta_mes)} un./mês · ${d[j].emps} emp.</div>`});
+// 6 indice
+overlay('indice','indice',{lo:Math.min(0,minOf(d=>d.sem.map(x=>x.indice??0)))-.2,hi:Math.max(1.5,maxOf(d=>d.sem.map(x=>x.indice??0)))*1.08,yfmt:v=>v.toLocaleString('pt-BR',{maximumFractionDigits:1}),cellfmt:f2,ref:1,
+  tipRows:(d,j,i)=>row(swSq(COR[i]),NOME[i],f2(d[j].indice))+`<div class="n">${f0(d[j].vendidas)} vendidas × ${f0(d[j].esperadas)} esperadas pela idade</div>`});
+
+// 7 curvas
+cols('curvas',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.className='mini';m.innerHTML=`<div class="t"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</div>`;c.appendChild(m);
+  const d=g(s,r);const K=[...Array(25).keys()];const cats=K.map(String);
+  const V=SAF.map(sf=>K.map(k=>{const p=d.curvas.find(x=>x.s==sf&&x.k==k);return p?p.p:null}));
+  const div=chartDiv(m);reg(div,()=>{const f=frame(div,{h:220,lo:0,hi:1,yfmt:v=>fp(v,0),cats,xlab:false});
+    [0,6,12,18,24].forEach(k=>txt(f.svg,f.X(k),f.h-10,k===24?'24 meses':k));
+    lines(f,SAF.map((sf,q)=>({v:V[q],c:SCOR[q],dash:SDASH[q],dots:false})).reverse());
+    hover(f,k=>`<div class="h">${NOME[i]} · mês ${k} · ${r} km</div>`+SAF.map((sf,q)=>row(swLn(SCOR[q],SCLS[q]),'Safra '+sf,fp(V[q][k],0))).join(''))});
+  const lg=document.createElement('div');lg.className='legend';lg.style.marginTop='0';lg.style.fontSize='13px';
+  lg.innerHTML=SAF.map((sf,q)=>`<span class="lg" style="font-weight:400"><span class="ln ${SCLS[q]}" style="color:${SCOR[q]}"></span>${sf}: ${(d.safras[sf]||{emps:0}).emps} emp. · ${f0((d.safras[sf]||{unid:0}).unid)} un.</span>`).join('');m.appendChild(lg);}))
+
+// 8 tabela
+const JAN=[[3,'0 a 3'],[6,'4 a 6'],[9,'7 a 9'],[12,'10 a 12'],[18,'13 a 18'],[24,'19 a 24']];
+cols('tabela',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.className='mini';m.innerHTML=`<div class="t"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</div>`;c.appendChild(m);
+  const d=g(s,r),cell=(sf,k,f)=>{const x=d.tabela_idade.find(t=>t.s==sf&&t.idade==k);return x&&x[f]!=null?x[f]:null};
+  const grp=`<tr class="grp"><th></th>${SAF.map(sf=>`<th colspan="3">Safra ${sf} <span style="color:var(--muted);font-weight:400">(${(d.safras[sf]||{emps:0}).emps} emp. · ${f0((d.safras[sf]||{unid:0}).unid)} un.)</span></th>`).join('')}</tr>`;
+  table(m,['Idade (meses)',...SAF.flatMap(()=>['% vend.','R$/m²','R$/m² out/26'])],JAN.map(([k,l])=>[l,...SAF.flatMap(sf=>[fp(cell(sf,k,'pct'),0),f0(cell(sf,k,'rs_m2')),`<b>${f0(cell(sf,k,'rs_m2_hoje'))}</b>`])]),grp)}))
+
+// redesenho
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>renders.forEach(([d,f])=>f()),120)});
+if(window.ResizeObserver){let first=true;new ResizeObserver(()=>{if(first){first=false;return}clearTimeout(rt);rt=setTimeout(()=>renders.forEach(([d,f])=>f()),120)}).observe(document.querySelector('.wrap'))}
+</script>

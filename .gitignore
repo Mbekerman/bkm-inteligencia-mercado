@@ -1,0 +1,4 @@
+motor/cache/
+__pycache__/
+*.pyc
+saida/

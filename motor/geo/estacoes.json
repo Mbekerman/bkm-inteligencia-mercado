@@ -1,0 +1,1626 @@
+[
+{
+"nome": "CORINTHIANS-ITAQUERA",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.4711,
+"lat": -23.5423
+},
+{
+"nome": "ARTUR ALVIM",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.4846,
+"lat": -23.5403
+},
+{
+"nome": "PATRIARCA",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5014,
+"lat": -23.5312
+},
+{
+"nome": "GUILHERMINA-ESPERANÇA",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5165,
+"lat": -23.5293
+},
+{
+"nome": "VILA MATILDE",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.531,
+"lat": -23.5319
+},
+{
+"nome": "PENHA",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5423,
+"lat": -23.5335
+},
+{
+"nome": "CARRÃO",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5642,
+"lat": -23.5379
+},
+{
+"nome": "TATUAPÉ",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5763,
+"lat": -23.5404
+},
+{
+"nome": "BELÉM",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5901,
+"lat": -23.543
+},
+{
+"nome": "BRESSER-MOOCA",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6075,
+"lat": -23.5465
+},
+{
+"nome": "BRÁS",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6159,
+"lat": -23.5479
+},
+{
+"nome": "PEDRO II",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6259,
+"lat": -23.5497
+},
+{
+"nome": "SÉ",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6331,
+"lat": -23.5509
+},
+{
+"nome": "ANHANGABAÚ",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6389,
+"lat": -23.5479
+},
+{
+"nome": "REPÚBLICA",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6431,
+"lat": -23.5439
+},
+{
+"nome": "SANTA CECÍLIA",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6489,
+"lat": -23.5396
+},
+{
+"nome": "MARECHAL DEODORO",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.656,
+"lat": -23.5335
+},
+{
+"nome": "PALMEIRAS-BARRA FUNDA",
+"linha": "VERMELHA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6674,
+"lat": -23.5259
+},
+{
+"nome": "VILA MADALENA",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6909,
+"lat": -23.5464
+},
+{
+"nome": "SANTUÁRIO NOSSA SENHORA DE FÁTIMA-SUMARÉ",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6775,
+"lat": -23.551
+},
+{
+"nome": "CLÍNICAS",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6708,
+"lat": -23.5541
+},
+{
+"nome": "CONSOLAÇÃO",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6612,
+"lat": -23.5572
+},
+{
+"nome": "TRIANON-MASP",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6544,
+"lat": -23.5632
+},
+{
+"nome": "BRIGADEIRO",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6474,
+"lat": -23.5689
+},
+{
+"nome": "PARAÍSO",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6411,
+"lat": -23.5758
+},
+{
+"nome": "ANA ROSA",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6386,
+"lat": -23.5814
+},
+{
+"nome": "CHÁCARA KLABIN",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6305,
+"lat": -23.5926
+},
+{
+"nome": "SANTOS-IMIGRANTES",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6207,
+"lat": -23.5959
+},
+{
+"nome": "ALTO DO IPIRANGA",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6124,
+"lat": -23.6022
+},
+{
+"nome": "SACOMÃ",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6032,
+"lat": -23.6014
+},
+{
+"nome": "TAMANDUATEÍ",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5896,
+"lat": -23.5929
+},
+{
+"nome": "VILA PRUDENTE",
+"linha": "VERDE",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5819,
+"lat": -23.5843
+},
+{
+"nome": "VILA MARIANA",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6347,
+"lat": -23.5891
+},
+{
+"nome": "TUCURUVI",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6032,
+"lat": -23.48
+},
+{
+"nome": "PARADA INGLESA",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6088,
+"lat": -23.487
+},
+{
+"nome": "AYRTON SENNA-JARDIM SÃO PAULO",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6171,
+"lat": -23.4924
+},
+{
+"nome": "SANTANA",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6248,
+"lat": -23.5026
+},
+{
+"nome": "CARANDIRU",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.625,
+"lat": -23.5093
+},
+{
+"nome": "PORTUGUESA-TIETÊ",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6252,
+"lat": -23.5161
+},
+{
+"nome": "ARMÊNIA",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6293,
+"lat": -23.5255
+},
+{
+"nome": "TIRADENTES",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6322,
+"lat": -23.5307
+},
+{
+"nome": "LUZ",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6337,
+"lat": -23.5369
+},
+{
+"nome": "SÃO BENTO",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6342,
+"lat": -23.5441
+},
+{
+"nome": "SÉ",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6331,
+"lat": -23.551
+},
+{
+"nome": "JAPÃO-LIBERDADE",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6357,
+"lat": -23.555
+},
+{
+"nome": "SÃO JOAQUIM",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6387,
+"lat": -23.5619
+},
+{
+"nome": "VERGUEIRO",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6399,
+"lat": -23.5689
+},
+{
+"nome": "PARAÍSO",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6408,
+"lat": -23.5757
+},
+{
+"nome": "ANA ROSA",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6385,
+"lat": -23.5813
+},
+{
+"nome": "VILA MARIANA",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6347,
+"lat": -23.5891
+},
+{
+"nome": "SANTA CRUZ",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6367,
+"lat": -23.5988
+},
+{
+"nome": "PRAÇA DA ÁRVORE",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6379,
+"lat": -23.6106
+},
+{
+"nome": "SAÚDE",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6392,
+"lat": -23.6186
+},
+{
+"nome": "SÃO JUDAS",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6408,
+"lat": -23.6258
+},
+{
+"nome": "CONCEIÇÃO",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6413,
+"lat": -23.6354
+},
+{
+"nome": "JABAQUARA",
+"linha": "AZUL",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.641,
+"lat": -23.6465
+},
+{
+"nome": "ORATÓRIO",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5619,
+"lat": -23.5822
+},
+{
+"nome": "VILA PRUDENTE",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5838,
+"lat": -23.5847
+},
+{
+"nome": "SÃO LUCAS",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5444,
+"lat": -23.5893
+},
+{
+"nome": "VILA TOLSTÓI",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5271,
+"lat": -23.6009
+},
+{
+"nome": "VILA UNIÃO",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5161,
+"lat": -23.6029
+},
+{
+"nome": "CAMILO HADDAD",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5377,
+"lat": -23.5954
+},
+{
+"nome": "CAPÃO REDONDO",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.768,
+"lat": -23.6593
+},
+{
+"nome": "CAMPO LIMPO",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.759,
+"lat": -23.6494
+},
+{
+"nome": "VILA DAS BELEZAS",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.7457,
+"lat": -23.6404
+},
+{
+"nome": "GIOVANNI GRONCHI",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.7341,
+"lat": -23.644
+},
+{
+"nome": "SANTO AMARO",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.7209,
+"lat": -23.6558
+},
+{
+"nome": "LARGO TREZE",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.7095,
+"lat": -23.6545
+},
+{
+"nome": "ADOLFO PINHEIRO",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.7039,
+"lat": -23.6497
+},
+{
+"nome": "ALTO DA BOA VISTA",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6991,
+"lat": -23.6415
+},
+{
+"nome": "BORBA GATO",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.693,
+"lat": -23.6334
+},
+{
+"nome": "BROOKLIN",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.688,
+"lat": -23.6273
+},
+{
+"nome": "EUCALIPTOS",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.669,
+"lat": -23.6101
+},
+{
+"nome": "MOEMA",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.662,
+"lat": -23.6033
+},
+{
+"nome": "HOSPITAL SÃO PAULO",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6454,
+"lat": -23.5982
+},
+{
+"nome": "SANTA CRUZ",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6372,
+"lat": -23.5985
+},
+{
+"nome": "CHÁCARA KLABIN",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6305,
+"lat": -23.5926
+},
+{
+"nome": "AACD-SERVIDOR",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6518,
+"lat": -23.5976
+},
+{
+"nome": "LUZ",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.6345,
+"lat": -23.5362
+},
+{
+"nome": "REPÚBLICA",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.643,
+"lat": -23.5446
+},
+{
+"nome": "PAULISTA",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.6622,
+"lat": -23.5551
+},
+{
+"nome": "FARIA LIMA",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.694,
+"lat": -23.5672
+},
+{
+"nome": "PINHEIROS",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.7017,
+"lat": -23.5672
+},
+{
+"nome": "BUTANTÃ",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.7082,
+"lat": -23.572
+},
+{
+"nome": "FRADIQUE COUTINHO",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.6842,
+"lat": -23.5662
+},
+{
+"nome": "HIGIENÓPOLIS-MACKENZIE",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.6523,
+"lat": -23.549
+},
+{
+"nome": "OSCAR FREIRE",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.6721,
+"lat": -23.5605
+},
+{
+"nome": "SÃO PAULO-MORUMBI",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.7238,
+"lat": -23.5864
+},
+{
+"nome": "CAMPO BELO",
+"linha": "LILAS",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.6823,
+"lat": -23.619
+},
+{
+"nome": "SÃO MATEUS",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.4767,
+"lat": -23.6121
+},
+{
+"nome": "FAZENDA DA JUTA",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.4875,
+"lat": -23.6117
+},
+{
+"nome": "SAPOPEMBA",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5014,
+"lat": -23.6148
+},
+{
+"nome": "JARDIM PLANALTO",
+"linha": "PRATA",
+"empresa": "METRO",
+"situacao": "OPERANDO",
+"lon": -46.5071,
+"lat": -23.6074
+},
+{
+"nome": "VILA SÔNIA",
+"linha": "AMARELA",
+"empresa": "VIAQUATRO",
+"situacao": "OPERANDO",
+"lon": -46.7348,
+"lat": -23.5934
+},
+{
+"nome": "MAUÁ",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4615,
+"lat": -23.6683
+},
+{
+"nome": "MOGI DAS CRUZES",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.198,
+"lat": -23.5218
+},
+{
+"nome": "PERUS",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7538,
+"lat": -23.4048
+},
+{
+"nome": "PIQUERI",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7149,
+"lat": -23.5029
+},
+{
+"nome": "PIRITUBA",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.726,
+"lat": -23.4885
+},
+{
+"nome": "POÁ",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3436,
+"lat": -23.5254
+},
+{
+"nome": "PREFEITO SALADINO",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5369,
+"lat": -23.6378
+},
+{
+"nome": "RIBEIRÃO PIRES",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4145,
+"lat": -23.7138
+},
+{
+"nome": "RIO GRANDE DA SERRA",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3916,
+"lat": -23.7435
+},
+{
+"nome": "SÃO CAETANO",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5701,
+"lat": -23.6098
+},
+{
+"nome": "SÃO MIGUEL PAULISTA",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4437,
+"lat": -23.4905
+},
+{
+"nome": "SUZANO",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.308,
+"lat": -23.534
+},
+{
+"nome": "TAMANDUATEÍ",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5894,
+"lat": -23.5928
+},
+{
+"nome": "UTINGA",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5442,
+"lat": -23.6263
+},
+{
+"nome": "VÁRZEA PAULISTA",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.8291,
+"lat": -23.209
+},
+{
+"nome": "VILA CLARICE",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7442,
+"lat": -23.4699
+},
+{
+"nome": "VILA AURORA",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7474,
+"lat": -23.4375
+},
+{
+"nome": "GUARULHOS CECAP",
+"linha": "JADE",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4937,
+"lat": -23.4474
+},
+{
+"nome": "ENGENHEIRO CARDOSO",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.9286,
+"lat": -23.5352
+},
+{
+"nome": "JOÃO DIAS",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7238,
+"lat": -23.6402
+},
+{
+"nome": "IPIRANGA",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5967,
+"lat": -23.5825
+},
+{
+"nome": "ITAIM PAULISTA",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.402,
+"lat": -23.4939
+},
+{
+"nome": "ITAQUAQUECETUBA",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3479,
+"lat": -23.4861
+},
+{
+"nome": "AEROPORTO GUARULHOS",
+"linha": "JADE",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4938,
+"lat": -23.4331
+},
+{
+"nome": "CALMON VIANA",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3324,
+"lat": -23.5257
+},
+{
+"nome": "CALMON VIANA",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3324,
+"lat": -23.5257
+},
+{
+"nome": "JUNDIAÍ",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.8723,
+"lat": -23.1952
+},
+{
+"nome": "PREFEITO CELSO DANIEL - SANTO ANDRÉ",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5283,
+"lat": -23.6521
+},
+{
+"nome": "CORINTHIANS - ITAQUERA",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4711,
+"lat": -23.5421
+},
+{
+"nome": "DOM BOSCO",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4481,
+"lat": -23.5418
+},
+{
+"nome": "JOSÉ BONIFÁCIO",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4315,
+"lat": -23.5391
+},
+{
+"nome": "JARDIM HELENA - VILA MARA",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4209,
+"lat": -23.4927
+},
+{
+"nome": "JARDIM ROMANO",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3854,
+"lat": -23.4848
+},
+{
+"nome": "ÁGUA BRANCA",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.689,
+"lat": -23.5214
+},
+{
+"nome": "ANTONIO GIANETTI NETO",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3837,
+"lat": -23.5543
+},
+{
+"nome": "ARACARÉ",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3391,
+"lat": -23.4997
+},
+{
+"nome": "BALTAZAR FIDELIS",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7236,
+"lat": -23.3099
+},
+{
+"nome": "BOTUJURU",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7677,
+"lat": -23.2358
+},
+{
+"nome": "BRÁS CUBAS",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.2255,
+"lat": -23.5363
+},
+{
+"nome": "CAIEIRAS",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7516,
+"lat": -23.3663
+},
+{
+"nome": "OSASCO",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7759,
+"lat": -23.5277
+},
+{
+"nome": "OSASCO",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7759,
+"lat": -23.5277
+},
+{
+"nome": "CAMPO LIMPO PAULISTA",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7853,
+"lat": -23.2067
+},
+{
+"nome": "CAPUAVA",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4901,
+"lat": -23.6583
+},
+{
+"nome": "ENGENHEIRO MANOEL FEIO",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3684,
+"lat": -23.4794
+},
+{
+"nome": "ESTUDANTES",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.1849,
+"lat": -23.5157
+},
+{
+"nome": "FERRAZ DE VASCONCELOS",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.3683,
+"lat": -23.5408
+},
+{
+"nome": "FRANCISCO MORATO",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7425,
+"lat": -23.2817
+},
+{
+"nome": "FRANCO DA ROCHA",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7263,
+"lat": -23.3296
+},
+{
+"nome": "GUAPITUBA",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4488,
+"lat": -23.692
+},
+{
+"nome": "IMPERATRIZ LEOPOLDINA",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7376,
+"lat": -23.5238
+},
+{
+"nome": "JANDIRA",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.9024,
+"lat": -23.5277
+},
+{
+"nome": "JARDIM BELVAL",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.8893,
+"lat": -23.514
+},
+{
+"nome": "JARDIM SILVEIRA",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.8936,
+"lat": -23.5238
+},
+{
+"nome": "JÚLIO PRESTES",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.641,
+"lat": -23.5326
+},
+{
+"nome": "LAPA (LINHA 8)",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.699,
+"lat": -23.5202
+},
+{
+"nome": "SANTO AMARO (LINHA 9)",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7192,
+"lat": -23.6562
+},
+{
+"nome": "QUITAÚNA",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.8068,
+"lat": -23.5228
+},
+{
+"nome": "SAGRADO CORAÇÃO",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.9171,
+"lat": -23.5291
+},
+{
+"nome": "SANTA TEREZINHA",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.8479,
+"lat": -23.5166
+},
+{
+"nome": "VILLA-LOBOS - JAGUARÉ",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7328,
+"lat": -23.546
+},
+{
+"nome": "ITAPEVI",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.9357,
+"lat": -23.5461
+},
+{
+"nome": "JURUBATUBA",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7021,
+"lat": -23.6774
+},
+{
+"nome": "BERRINI",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.697,
+"lat": -23.6053
+},
+{
+"nome": "AUTÓDROMO",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.6884,
+"lat": -23.7066
+},
+{
+"nome": "PINHEIROS",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.703,
+"lat": -23.5665
+},
+{
+"nome": "GENERAL MIGUEL COSTA",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.8157,
+"lat": -23.5234
+},
+{
+"nome": "PRIMAVERA - INTERLAGOS",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.6918,
+"lat": -23.7227
+},
+{
+"nome": "GRAJAÚ",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.697,
+"lat": -23.7364
+},
+{
+"nome": "HEBRAICA - REBOUÇAS",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.6988,
+"lat": -23.5736
+},
+{
+"nome": "CIDADE JARDIM",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.6912,
+"lat": -23.5855
+},
+{
+"nome": "VILA OLÍMPIA",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.6929,
+"lat": -23.5935
+},
+{
+"nome": "MORUMBI",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7018,
+"lat": -23.6218
+},
+{
+"nome": "GRANJA JULIETA",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7123,
+"lat": -23.6279
+},
+{
+"nome": "SOCORRO",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7109,
+"lat": -23.6635
+},
+{
+"nome": "ANTÔNIO JOÃO",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.8589,
+"lat": -23.5168
+},
+{
+"nome": "BARUERI",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.8752,
+"lat": -23.5126
+},
+{
+"nome": "CARAPICUÍBA",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.8354,
+"lat": -23.5185
+},
+{
+"nome": "CEASA",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7426,
+"lat": -23.5374
+},
+{
+"nome": "CIDADE UNIVERSITÁRIA",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7118,
+"lat": -23.5576
+},
+{
+"nome": "COMANDANTE SAMPAIO",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7959,
+"lat": -23.5257
+},
+{
+"nome": "DOMINGOS DE MORAIS",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7215,
+"lat": -23.5189
+},
+{
+"nome": "JUNDIAPEBA",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.2581,
+"lat": -23.5428
+},
+{
+"nome": "LAPA (LINHA 7)",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7037,
+"lat": -23.5177
+},
+{
+"nome": "SANTA RITA",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.9475,
+"lat": -23.545
+},
+{
+"nome": "JARAGUÁ",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.7384,
+"lat": -23.4554
+},
+{
+"nome": "LUZ",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.6351,
+"lat": -23.535
+},
+{
+"nome": "LUZ",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.6351,
+"lat": -23.535
+},
+{
+"nome": "MOOCA",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.6084,
+"lat": -23.5581
+},
+{
+"nome": "PRESIDENTE ALTINO",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7618,
+"lat": -23.5312
+},
+{
+"nome": "PRESIDENTE ALTINO",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7618,
+"lat": -23.5312
+},
+{
+"nome": "BRÁS",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.6169,
+"lat": -23.544
+},
+{
+"nome": "BRÁS",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.6169,
+"lat": -23.544
+},
+{
+"nome": "BRÁS",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.6169,
+"lat": -23.544
+},
+{
+"nome": "TATUAPÉ",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5765,
+"lat": -23.5402
+},
+{
+"nome": "TATUAPÉ",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5765,
+"lat": -23.5402
+},
+{
+"nome": "AMADOR BUENO",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.9838,
+"lat": -23.5305
+},
+{
+"nome": "GUAIANASES",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4156,
+"lat": -23.5423
+},
+{
+"nome": "USP LESTE",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5007,
+"lat": -23.4855
+},
+{
+"nome": "PALMEIRAS - BARRA FUNDA",
+"linha": "RUBI",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.6675,
+"lat": -23.5256
+},
+{
+"nome": "PALMEIRAS - BARRA FUNDA",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.6675,
+"lat": -23.5256
+},
+{
+"nome": "PALMEIRAS - BARRA FUNDA",
+"linha": "TURQUESA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.6675,
+"lat": -23.5256
+},
+{
+"nome": "PALMEIRAS - BARRA FUNDA",
+"linha": "CORAL",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.6675,
+"lat": -23.5256
+},
+{
+"nome": "COMENDADOR ERMELINO",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.4824,
+"lat": -23.4851
+},
+{
+"nome": "ENGENHEIRO GOULART",
+"linha": "SAFIRA",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5201,
+"lat": -23.4981
+},
+{
+"nome": "ENGENHEIRO GOULART",
+"linha": "JADE",
+"empresa": "CPTM",
+"situacao": "OPERANDO",
+"lon": -46.5201,
+"lat": -23.4981
+},
+{
+"nome": "MENDES / BRUNO COVAS",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7093,
+"lat": -23.7543
+},
+{
+"nome": "VARGINHA",
+"linha": "ESMERALDA",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.7119,
+"lat": -23.77
+},
+{
+"nome": "AMBUITÁ",
+"linha": "DIAMANTE",
+"empresa": "VIAMOBILIDADE",
+"situacao": "OPERANDO",
+"lon": -46.9727,
+"lat": -23.5302
+}
+]

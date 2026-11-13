@@ -1,0 +1,21 @@
+{
+  "titulo": "Mercado de 28 a 33 m²",
+  "tipologia": {"area_min": 28, "area_max": 33, "finalidade": "Residencial"},
+  "excluir_nr": true,
+  "excluir_nomes": ["Moremais João Dias"],
+  "min_unidades_projeto": 80,
+  "raios_km": [3, 5],
+  "cenarios": [
+    {"id": "vb", "nome": "Vila das Belezas",
+     "pin": {"lat": -23.6468, "lon": -46.7376, "descricao": "R. Tomás de Sousa, 640"},
+     "sombras": [
+       {"tipo": "barreira", "nome": "Marginal Pinheiros", "descricao": "Só o lado do terreno da Marginal Pinheiros e da Guarapiranga", "geojson": "geo/barreiras/rio-pinheiros-jurubatuba.json"},
+       {"tipo": "barreira", "nome": "Guarapiranga", "descricao": "", "geojson": "geo/barreiras/canal-guarapiranga.json"}]},
+    {"id": "pgp", "nome": "Rainha da Noite sem metrô",
+     "pin": {"lat": -23.5184, "lon": -46.4558, "descricao": "R. Rainha da Noite, 840"},
+     "sombras": [{"tipo": "raio", "km": 1.5, "estacoes": ["Corinthians-Itaquera", "São Miguel Paulista"],
+                  "descricao": "Fora de 1,5 km das estações Itaquera (Metrô) e São Miguel Paulista (CPTM)"}]},
+    {"id": "pgi", "nome": "Rainha da Noite com metrô",
+     "pin": {"lat": -23.5184, "lon": -46.4558, "descricao": "R. Rainha da Noite, 840"}}
+  ]
+}
