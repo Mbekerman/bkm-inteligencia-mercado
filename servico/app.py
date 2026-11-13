@@ -77,9 +77,16 @@ def _chaves():
     except ValueError: return {}
 
 
-def cliente(auth):
-    if not auth or not auth.startswith('Bearer '): return None
-    h = hashlib.sha256(auth[7:].strip().encode()).hexdigest()
+def _chave(req):
+    """A chave do pedido: Authorization (com ou sem "Bearer ", como vier colada) ou X-API-Key."""
+    a = (req.headers.get('authorization') or req.headers.get('x-api-key') or '').strip()
+    if a.lower().startswith('bearer '): a = a[7:].strip()
+    return a
+
+
+def cliente(chave):
+    if not chave: return None
+    h = hashlib.sha256(chave.encode()).hexdigest()
     for nome, hh in _chaves().items():
         if hmac.compare_digest(h, hh): return nome
     return None
@@ -191,8 +198,15 @@ ABERTAS = ('/saude', '/relatorios/')
 @app.middleware('http')
 async def autenticar(req: Request, prox):
     if not req.url.path.startswith(ABERTAS):
-        quem = cliente(req.headers.get('authorization'))
-        if not quem: return JSONResponse({'erro': 'chave inválida ou ausente (Authorization: Bearer <chave>)'}, 401)
+        chave = _chave(req)
+        quem = cliente(chave)
+        if not quem:
+            # diagnóstico sem expor a chave: se veio, de que jeito e com quantos caracteres
+            print(json.dumps({'severity': 'WARNING', 'auth': 'recusada', 'caminho': req.url.path,
+                              'cabecalhos': sorted(k for k in req.headers.keys() if k in ('authorization', 'x-api-key')),
+                              'bearer': (req.headers.get('authorization') or '').lower().startswith('bearer '),
+                              'tamanho': len(chave), 'prefixo_bkm': chave.startswith('bkm_')}), flush=True)
+            return JSONResponse({'erro': 'chave inválida ou ausente (Authorization: Bearer <chave>)'}, 401)
         req.state.cliente = quem
     return await prox(req)
 
