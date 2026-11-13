@@ -4,7 +4,8 @@ Relatório de mercado da BKM (lançamentos, à venda, vendas, estoque, preço ×
 
 ## Partes
 - `motor/`: o cálculo e a página do relatório. `python3 motor/motor.py <spec.json> <pasta_saida>`. Regras de cálculo e formato da spec em `motor/README.md`.
-- Próximas: serviço no Cloud Run com API e servidor MCP (chave por cliente) e a skill que usa o conector.
+- `servico/`: serviço no Cloud Run com a API HTTP e o servidor MCP (`/mcp/`), chave por cliente (`servico/app.py`; deploy em `docs/deploy.md`). Ferramentas MCP: `base_de_dados`, `buscar_empreendimentos`, `relatorio_de_mercado` e `regras_do_relatorio`.
+- Próxima: a skill que usa o conector.
 
 ## De onde vêm os dados
 `motor/fonte.py` lê do banco quando há `DATABASE_URL` (ou `MOTOR_ORIGEM=banco`):

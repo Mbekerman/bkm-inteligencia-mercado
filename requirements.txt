@@ -1,3 +1,7 @@
 pandas>=2.2
 numpy>=1.26
 psycopg[binary]>=3.2
+fastapi>=0.115
+uvicorn>=0.30
+mcp>=1.12,<2
+google-cloud-storage>=2.18
