@@ -42,3 +42,19 @@ A primeira chamada depois de o serviço dormir lê a base inteira do banco (cerc
 ## 4. Conectar um agente
 - MCP (Claude, Grok, outros): endereço `<URL>/mcp/`, transporte Streamable HTTP, cabeçalho `Authorization: Bearer <chave>`.
 - HTTP: `GET <URL>/empreendimentos?lat=..&lon=..&raio_km=3&area_min=28&area_max=33`, `POST <URL>/relatorio` com a spec (ver `motor/README.md`), sempre com o mesmo cabeçalho.
+
+## Redeploy depois de um merge
+
+```bash
+cd ~/bkm-inteligencia-mercado && git pull
+gcloud run deploy inteligencia-mercado --source . --region southamerica-east1
+```
+Só isso: mantém segredos, bucket e URL_PUBLICA. Não repetir o comando do primeiro deploy (o `--set-env-vars` apaga o URL_PUBLICA).
+
+## Conector no claude.ai
+
+O conector personalizado do claude.ai não manda cabeçalho próprio, então a chave vai no endereço:
+`https://inteligencia-mercado-469931692112.southamerica-east1.run.app/k/<chave>/mcp/`.
+O serviço troca `/k/<chave>` pelo cabeçalho `Authorization: Bearer <chave>`. Atenção: o caminho aparece
+nos logs de requisição do Cloud Run; quem lê os logs do projeto vê essa chave. Usar uma chave só para o
+claude.ai, para poder trocá-la sozinha. Os demais clientes (Grok, scripts) usam o cabeçalho.
