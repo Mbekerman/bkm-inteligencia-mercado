@@ -181,7 +181,9 @@ def processos_licenciamento(orulo_id: int | None = None, lote: str | None = None
                             limite: int = 200) -> dict:
     """Processos de edificação nova do Aprova Digital (São Paulo). orulo_id: os do prédio do empreendimento.
     lote: setor+quadra+lote (10 dígitos). texto: parte do endereço ou do assunto, ou o número do processo.
-    desde: 'AAAA-MM-DD' (autuação). social: HIS ou HMP (R2v é só a categoria de prédio vertical, não é social). Sem filtro, os mais recentes."""
+    desde: 'AAAA-MM-DD' (autuação). social: HIS ou HMP (R2v é só a categoria de prédio vertical, não é social). Sem filtro, os mais recentes.
+    Atenção: no extrato do 2º sem./2025 a área construída da prefeitura não é confiável (vem pequena demais,
+    ex.: 534 m² para 182 unidades); as unidades valem."""
     return banco.processos(orulo_id, lote, texto, desde, min_unidades, social, limite)
 
 
