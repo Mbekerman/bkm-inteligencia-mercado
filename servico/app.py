@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'
 from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.responses import HTMLResponse, JSONResponse
 from mcp.server.fastmcp import FastMCP
+from mcp.server.transport_security import TransportSecuritySettings
 import fonte, motor, consultas, banco
 
 RAIZ = os.path.dirname(os.path.abspath(__file__))
@@ -102,7 +103,9 @@ def gerar_relatorio(spec):
 
 
 # ---------------------------------------------------------------- MCP
-mcp = FastMCP('bkm-inteligencia-mercado', stateless_http=True, json_response=True, streamable_http_path='/')
+# sem a proteção contra DNS rebinding, que só aceita Host localhost (é para servidor local; aqui protege a chave)
+mcp = FastMCP('bkm-inteligencia-mercado', stateless_http=True, json_response=True, streamable_http_path='/',
+              transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False))
 
 
 @mcp.tool()
@@ -257,3 +260,22 @@ def rota_processos(orulo_id: int | None = None, lote: str | None = None, texto: 
 
 
 app.mount('/mcp', mcp_app)
+
+
+# ---------------------------------------------------------------- chave no endereço
+# O conector do claude.ai não manda cabeçalho próprio (só OAuth): para ele a chave vai no caminho,
+# .../k/<chave>/mcp/. Vira o mesmo "Authorization: Bearer <chave>" antes de tudo. Os outros clientes
+# continuam com o cabeçalho, que não aparece nos logs de acesso; o caminho aparece (ver docs/deploy.md).
+_api = app
+
+
+async def app(scope, receive, send):
+    if scope['type'] == 'http' and scope['path'].startswith('/k/'):
+        resto = scope['path'][3:]
+        chave, _, caminho = resto.partition('/')
+        caminho = '/' + caminho
+        if caminho == '/mcp': caminho = '/mcp/'
+        scope = dict(scope, path=caminho, raw_path=caminho.encode(),
+                     headers=[(k, v) for k, v in scope['headers'] if k != b'authorization']
+                     + [(b'authorization', f'Bearer {chave}'.encode())])
+    await _api(scope, receive, send)
