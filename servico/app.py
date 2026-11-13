@@ -122,7 +122,7 @@ mcp = FastMCP('bkm-inteligencia-mercado', stateless_http=True, json_response=Tru
 @mcp.tool()
 def base_de_dados() -> dict:
     """Período, quantidade de empreendimentos e tipologias e municípios da base do Órulo (São Paulo e
-    região metropolitana; relatório de 36 meses até out/2026 e coletas mensais do monitor da BKM depois)."""
+    região metropolitana; histórico do Órulo de dez/2023 a out/2026, 35 meses, e coletas mensais do monitor da BKM depois)."""
     return consultas.sobre_a_base(BASE.get())
 
 
@@ -181,7 +181,7 @@ def processos_licenciamento(orulo_id: int | None = None, lote: str | None = None
                             limite: int = 200) -> dict:
     """Processos de edificação nova do Aprova Digital (São Paulo). orulo_id: os do prédio do empreendimento.
     lote: setor+quadra+lote (10 dígitos). texto: parte do endereço ou do assunto, ou o número do processo.
-    desde: 'AAAA-MM-DD' (autuação). social: HIS/HMP/R2V. Sem filtro, os mais recentes."""
+    desde: 'AAAA-MM-DD' (autuação). social: HIS ou HMP (R2v é só a categoria de prédio vertical, não é social). Sem filtro, os mais recentes."""
     return banco.processos(orulo_id, lote, texto, desde, min_unidades, social, limite)
 
 

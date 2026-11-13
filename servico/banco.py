@@ -113,7 +113,7 @@ select p.processo, p.protocolo, p.relacionado, p.data_autuacao, p.assunto, p.end
         or p.processo = %(texto)s)
    and (%(desde)s::date is null or p.data_autuacao >= %(desde)s::date)
    and (%(min_unidades)s::integer is null or p.unidades >= %(min_unidades)s::integer)
-   and (%(social)s::boolean is null or (p.his or p.hmp or p.r2v or p.social_no_assunto) = %(social)s::boolean)
+   and (%(social)s::boolean is null or (p.his or p.hmp or p.social_no_assunto) = %(social)s::boolean)
  order by p.data_autuacao desc nulls last
  limit %(limite)s"""
 

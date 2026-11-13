@@ -296,7 +296,7 @@ def calcular(spec, d=None):
                          ['Raios', ' e '.join(map(str, raios)) + ' km do pin, em linha reta']]}
     if 'fonte' in d.columns and (d.fonte == 'monitor').any():
         m0 = d[d.fonte == 'monitor'].mes.min()
-        meta['recortes'].append(['Fonte', f"Relatório de 36 meses do Órulo até {MESES[(m0 - pd.offsets.MonthBegin(1)).month-1]}/{str((m0 - pd.offsets.MonthBegin(1)).year)[2:]}; "
+        meta['recortes'].append(['Fonte', f"Histórico do Órulo (dez/23) até {MESES[(m0 - pd.offsets.MonthBegin(1)).month-1]}/{str((m0 - pd.offsets.MonthBegin(1)).year)[2:]}; "
                                  f"de {MESES[m0.month-1]}/{str(m0.year)[2:]} em diante, coletas mensais do monitor da BKM (venda = unidade disponível que deixou de estar; "
                                  "tipologia pela mais próxima do mesmo empreendimento). Há troca de fonte nesse mês"])
     if 'conf_situacao' in d.columns:
