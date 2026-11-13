@@ -4,7 +4,7 @@ Relatório de mercado da BKM (lançamentos, à venda, vendas, estoque, preço ×
 
 ## Partes
 - `motor/`: o cálculo e a página do relatório. `python3 motor/motor.py <spec.json> <pasta_saida>`. Regras de cálculo e formato da spec em `motor/README.md`.
-- `servico/`: serviço no Cloud Run com a API HTTP e o servidor MCP (`/mcp/`), chave por cliente (`servico/app.py`; deploy em `docs/deploy.md`). Ferramentas MCP: `base_de_dados`, `buscar_empreendimentos`, `relatorio_de_mercado` e `regras_do_relatorio`.
+- `servico/`: serviço no Cloud Run com a API HTTP e o servidor MCP (`/mcp/`), chave por cliente (`servico/app.py`; deploy em `docs/deploy.md`). Ferramentas MCP: `base_de_dados`, `buscar_empreendimentos`, `relatorio_de_mercado`, `regras_do_relatorio`, e as consultas diretas ao banco (`servico/banco.py`): `esquema_do_banco`, `consulta_sql` (SQL livre, só leitura: usuário `im_leitor`, sessão só leitura, um comando por vez, 60 s e até 5.000 linhas), `tabela_de_unidades` (por id do Órulo) e `processos_licenciamento` (Aprova Digital, por empreendimento, lote, endereço, data, unidades e social). Na API HTTP: `POST /sql`, `GET /esquema`, `GET /unidades/<orulo_id>` e `GET /processos`.
 - Próxima: a skill que usa o conector.
 
 ## De onde vêm os dados

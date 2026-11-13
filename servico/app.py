@@ -9,14 +9,15 @@ Variáveis de ambiente:
 - URL_PUBLICA: endereço do serviço, para montar o link dos relatórios.
 
 Rotas: GET /saude (aberta), GET /base, GET /empreendimentos, POST /relatorio, GET /relatorios/<id>
-(aberta: o id é o segredo do link), GET /regras, e o MCP em /mcp (as mesmas consultas como ferramentas).
+(aberta: o id é o segredo do link), GET /regras, POST /sql, GET /esquema, GET /unidades/<orulo_id>,
+GET /processos, e o MCP em /mcp (as mesmas consultas como ferramentas).
 """
 import os, sys, json, time, uuid, hashlib, hmac, threading, contextlib
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'motor'))
 from fastapi import FastAPI, HTTPException, Request, Query
 from fastapi.responses import HTMLResponse, JSONResponse
 from mcp.server.fastmcp import FastMCP
-import fonte, motor, consultas
+import fonte, motor, consultas, banco
 
 RAIZ = os.path.dirname(os.path.abspath(__file__))
 REGRAS = open(os.path.join(RAIZ, '..', 'motor', 'README.md')).read()
@@ -138,6 +139,38 @@ def regras_do_relatorio() -> str:
     return REGRAS
 
 
+@mcp.tool()
+def esquema_do_banco() -> list:
+    """Tabelas e views do monitor de mercado (im_*) com colunas, tipos e descrições. Leia antes de consulta_sql."""
+    return banco.esquema()
+
+
+@mcp.tool()
+def consulta_sql(sql: str, limite: int = 1000) -> dict:
+    """Consulta SQL livre, só de leitura, no banco do monitor (Postgres; tabelas public.im_*). Um comando por vez,
+    até 60 s e até `limite` linhas (máx. 5000). Devolve {colunas, linhas, total, cortado}. Para conhecer as
+    tabelas, use esquema_do_banco. Unidades: im_unidades + im_unidade_estados (ate_coleta_id nulo = estado atual);
+    empreendimento pelo id do Órulo: im_ids_externos (entidade 'empreendimento', fonte 'orulo%')."""
+    return banco.consulta_livre(sql, limite)
+
+
+@mcp.tool()
+def tabela_de_unidades(orulo_id: int, incluir_removidas: bool = False) -> dict:
+    """Cabeçalho do empreendimento (pelo id do Órulo) e todas as unidades: torre, andar, número, tipo, dormitórios,
+    vagas, área, situação e preço atuais, R$/m², primeiro preço, grupo (tipologia do resumo) e venda."""
+    return banco.unidades(orulo_id, incluir_removidas)
+
+
+@mcp.tool()
+def processos_licenciamento(orulo_id: int | None = None, lote: str | None = None, texto: str | None = None,
+                            desde: str | None = None, min_unidades: int | None = None, social: bool | None = None,
+                            limite: int = 200) -> dict:
+    """Processos de edificação nova do Aprova Digital (São Paulo). orulo_id: os do prédio do empreendimento.
+    lote: setor+quadra+lote (10 dígitos). texto: parte do endereço ou do assunto, ou o número do processo.
+    desde: 'AAAA-MM-DD' (autuação). social: HIS/HMP/R2V. Sem filtro, os mais recentes."""
+    return banco.processos(orulo_id, lote, texto, desde, min_unidades, social, limite)
+
+
 # ---------------------------------------------------------------- HTTP
 mcp_app = mcp.streamable_http_app()
 
@@ -195,6 +228,32 @@ def rota_ver(rid: str):
 @app.get('/regras', response_class=HTMLResponse)
 def rota_regras():
     return '<pre>' + REGRAS.replace('&', '&amp;').replace('<', '&lt;') + '</pre>'
+
+
+@app.post('/sql')
+def rota_sql(corpo: dict):
+    try: return banco.consulta_livre(corpo.get('sql', ''), corpo.get('limite', 1000))
+    except ValueError as e: raise HTTPException(400, str(e))
+    except Exception as e: raise HTTPException(400, f'{type(e).__name__}: {e}')
+
+
+@app.get('/esquema')
+def rota_esquema():
+    return banco.esquema()
+
+
+@app.get('/unidades/{orulo_id}')
+def rota_unidades(orulo_id: int, incluir_removidas: bool = False):
+    try: return banco.unidades(orulo_id, incluir_removidas)
+    except ValueError as e: raise HTTPException(404, str(e))
+
+
+@app.get('/processos')
+def rota_processos(orulo_id: int | None = None, lote: str | None = None, texto: str | None = None,
+                   desde: str | None = None, min_unidades: int | None = None, social: bool | None = None,
+                   limite: int = 200):
+    try: return banco.processos(orulo_id, lote, texto, desde, min_unidades, social, limite)
+    except ValueError as e: raise HTTPException(404, str(e))
 
 
 app.mount('/mcp', mcp_app)
