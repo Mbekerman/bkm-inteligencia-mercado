@@ -12,16 +12,21 @@ MESES = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'
 from fonte import carregar_base
 
 def carregar_incc(ini, fim):
+    """Índice INCC-M acumulado por mês. O INCC de um mês sai no fim dele: os meses que ainda não
+    estão em incc.json repetem o último índice conhecido e voltam em INCC_FALTA."""
     raw = json.load(open(os.path.join(PKG, 'incc.json')))['mensal_pct']
     meses = [m.strftime('%Y-%m') for m in pd.date_range(ini, fim, freq='MS')]
     falta = [m for m in meses[1:] if m not in raw]
-    if falta:
-        sys.exit(f'INCC-M faltando em incc.json para: {", ".join(falta)}. Atualize antes de rodar.')
+    if falta and falta != meses[len(meses) - len(falta):]:
+        sys.exit(f'INCC-M faltando em incc.json no meio do período: {", ".join(falta)}. Atualize antes de rodar.')
+    INCC_FALTA[:] = falta
     idx = {}; a = 1.0
     for i, m in enumerate(meses):
-        if i: a *= 1 + raw[m] / 100
+        if i: a *= 1 + raw.get(m, 0) / 100
         idx[m] = a
     return idx
+
+INCC_FALTA = []
 
 # ---------------------------------------------------------------- geo
 def dist_km(lat, lon, la0, lo0):
@@ -285,8 +290,13 @@ def rodar(spec, saida):
             'periodo': per, 'gerado': datetime.date.today().strftime('%d/%m/%Y'), 'raios': raios, 'sem': labs, 'cenarios': meta_c,
             'recortes': [['Produto', faixa + ', uso ' + tp.get('finalidade', 'Residencial').lower()], ['Exclusões', ', '.join(exc) or 'Nenhuma'],
                          ['Período', f'{per}, mês a mês, por tipologia'], ['Lançamento', 'Mês da primeira venda (lançamento efetivo)' if spec.get('lancamento_efetivo', True) else 'Data de lançamento do Órulo'],
-                         ['Semestres', sem_txt], ['Correção', f"INCC-M (FGV), valores trazidos a {MESES[FIM.month-1]}/{str(FIM.year)[2:]}"],
+                         ['Semestres', sem_txt], ['Correção', f"INCC-M (FGV), valores trazidos a {MESES[FIM.month-1]}/{str(FIM.year)[2:]}" + (f"; sem o INCC de {', '.join(INCC_FALTA)}, ainda não publicado (mantido o último)" if INCC_FALTA else '')],
                          ['Raios', ' e '.join(map(str, raios)) + ' km do pin, em linha reta']]}
+    if 'fonte' in d.columns and (d.fonte == 'monitor').any():
+        m0 = d[d.fonte == 'monitor'].mes.min()
+        meta['recortes'].append(['Fonte', f"Relatório de 36 meses do Órulo até {MESES[(m0 - pd.offsets.MonthBegin(1)).month-1]}/{str((m0 - pd.offsets.MonthBegin(1)).year)[2:]}; "
+                                 f"de {MESES[m0.month-1]}/{str(m0.year)[2:]} em diante, coletas mensais do monitor da BKM (venda = unidade disponível que deixou de estar; "
+                                 "tipologia pela mais próxima do mesmo empreendimento). Há troca de fonte nesse mês"])
     if 'conf_situacao' in d.columns:
         meta['recortes'].append(['Conferência', 'Em São Paulo, as unidades do Órulo são comparadas com o processo de licenciamento '
                                  'do lote (Aprova Digital, processos protocolados desde 2020). Acima do processo + 5% = suspeito, '
