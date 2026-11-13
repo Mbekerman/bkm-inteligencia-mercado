@@ -274,8 +274,11 @@ async def app(scope, receive, send):
         resto = scope['path'][3:]
         chave, _, caminho = resto.partition('/')
         caminho = '/' + caminho
-        if caminho == '/mcp': caminho = '/mcp/'
         scope = dict(scope, path=caminho, raw_path=caminho.encode(),
                      headers=[(k, v) for k, v in scope['headers'] if k != b'authorization']
                      + [(b'authorization', f'Bearer {chave}'.encode())])
+    # /mcp sem a barra: o Starlette redirecionaria para http://.../mcp/ (atrás do Cloud Run perde o https)
+    # e o POST do cliente não segue; o claude.ai tira a barra do fim do endereço.
+    if scope['type'] == 'http' and scope['path'] == '/mcp':
+        scope = dict(scope, path='/mcp/', raw_path=b'/mcp/')
     await _api(scope, receive, send)
