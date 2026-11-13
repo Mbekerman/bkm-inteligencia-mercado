@@ -1,0 +1,4 @@
+.git
+motor/cache
+tests
+**/__pycache__

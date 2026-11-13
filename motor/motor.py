@@ -251,8 +251,10 @@ def resumo(t, INI, FIM, idx, SEMS):
     return r
 
 # ---------------------------------------------------------------- principal
-def rodar(spec, saida):
-    d = carregar_base()
+def calcular(spec, d=None):
+    """Calcula o relatório da spec. Devolve (resultado, html). d: a base já carregada (o serviço guarda
+    em memória); sem ela, carrega pela origem configurada (fonte.py)."""
+    if d is None: d = carregar_base()
     INI, FIM = d.mes.min(), d.mes.max()
     if spec.get('periodo_inicio'): INI = max(INI, pd.Timestamp(spec['periodo_inicio'] + '-01'))
     idx = carregar_incc(INI, FIM); SEMS = semestres(INI, FIM)
@@ -274,7 +276,7 @@ def rodar(spec, saida):
             bids = e[e.km <= R].index.tolist()
             t = cenario(d, bids, spec, INI, FIM, idx, SEMS)
             dados[f'{cid}_{R}'] = resumo(t, INI, FIM, idx, SEMS); cont[str(R)] = len(dados[f'{cid}_{R}']['emps'])
-            print(f'{c["nome"]} · {R} km: {cont[str(R)]} empreendimentos', file=sys.stderr)
+            pass
         meta_c.append({'id': cid, 'nome': c['nome'], 'pin': c['pin'].get('descricao') or f"{c['pin']['lat']:.5f}, {c['pin']['lon']:.5f}",
                        'sombras': [x for x in textos if x] or ['Sem sombra'], 'n': cont})
     tp = spec.get('tipologia', {})
@@ -301,11 +303,15 @@ def rodar(spec, saida):
         meta['recortes'].append(['Conferência', 'Em São Paulo, as unidades do Órulo são comparadas com o processo de licenciamento '
                                  'do lote (Aprova Digital, processos protocolados desde 2020). Acima do processo + 5% = suspeito, '
                                  'marcado na lista e mantido no cálculo'])
-    os.makedirs(saida, exist_ok=True)
-    res = {'meta': meta, 'dados': dados}
-    json.dump(res, open(os.path.join(saida, 'resultado.json'), 'w'), ensure_ascii=False, indent=1, default=float)
+    res = json.loads(json.dumps({'meta': meta, 'dados': dados}, ensure_ascii=False, default=float))
     tpl = open(os.path.join(PKG, 'template.html')).read()
-    html = tpl.replace('__TITULO__', meta['titulo']).replace('__DATA__', json.dumps(res, ensure_ascii=False, separators=(',', ':'), default=float))
+    html = tpl.replace('__TITULO__', meta['titulo']).replace('__DATA__', json.dumps(res, ensure_ascii=False, separators=(',', ':')))
+    return res, html
+
+def rodar(spec, saida, d=None):
+    res, html = calcular(spec, d)
+    os.makedirs(saida, exist_ok=True)
+    json.dump(res, open(os.path.join(saida, 'resultado.json'), 'w'), ensure_ascii=False, indent=1)
     open(os.path.join(saida, 'relatorio.html'), 'w').write(html)
     print(os.path.join(saida, 'relatorio.html'))
 
