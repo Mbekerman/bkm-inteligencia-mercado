@@ -124,43 +124,103 @@ def recorte(d, bids, spec):
     if tp.get('finalidade', 'Residencial'): x = x[x.FINALIDADE == tp.get('finalidade', 'Residencial')]
     return x
 
+# ---------------------------------------------------------------- estoque corrigido
+SALTO = 0.3    # salto maior que 30% das unidades da tipologia
+JANELA = 2     # que volta em até 2 meses = recarga ou zeramento de tabela do Órulo
+NAO_FECHA = 0.05  # linha do Órulo que não fecha acima de 5% das unidades do projeto
+
+def neutralizar(a, U, salto=SALTO, janela=JANELA):
+    """Série mensal de estoque de uma tipologia → (série corrigida, meses neutralizados).
+    Recarga: o estoque sobe mais que salto×U e desce de novo (mais que salto×U) em até `janela` meses.
+    Zeramento: o estoque cai mais que salto×U (ou vai a zero) e volta (sobe mais que salto×U, ou, depois
+    de ir a zero, volta a pelo menos metade do que era) em até `janela` meses. Os meses do pico ficam com o
+    estoque de antes dele, então não têm venda nem distrato; o mês da volta fica com a diferença real."""
+    a = np.asarray(a, dtype=float).copy(); neut = np.zeros(len(a), bool); thr = salto * U
+    i = 1
+    while i < len(a):
+        b = a[i - 1]; up = a[i] - b > thr; dn = b - a[i] > thr; zero = a[i] == 0 and b > 0
+        fez = False
+        if up or dn or zero:
+            for n in range(1, janela + 1):
+                j = i + n
+                if j >= len(a): break
+                run = a[i:j]
+                if up:
+                    if not (run - b > thr).all(): break
+                    volta = a[j] < a[j - 1] - thr
+                else:
+                    z = (run == 0).all()
+                    if not ((b - run > thr).all() or z): break
+                    volta = a[j] > a[j - 1] + thr or (z and a[j] >= 0.5 * b)
+                if volta:
+                    a[i:j] = b; neut[i:j] = True; i = j; fez = True; break
+        if not fez: i += 1
+    return a, neut
+
+def estoque_corrigido(x):
+    """Por tipologia, a série mensal do estoque (meses sem linha repetem o anterior) com recargas e
+    zeramentos neutralizados. Devolve, por linha de x: est_c, ant_c (estoque corrigido do mês anterior;
+    nulo no primeiro mês da tipologia), neut (mês neutralizado), gap e nao_fecha (a linha do Órulo não fecha:
+    estoque anterior − vendas + distratos ≠ estoque, acima de 5% das unidades do projeto)."""
+    u = x[['TID', 'mes', 'ESTOQUE TIPOLOGIA', 'UTOT_TIP']].sort_values(['TID', 'mes'])
+    u = u.groupby(['TID', 'mes'], sort=True).agg(e=('ESTOQUE TIPOLOGIA', 'last'), U=('UTOT_TIP', 'max')).reset_index()
+    mi = (u.mes.dt.year * 12 + u.mes.dt.month).to_numpy(); ev = u.e.fillna(0).to_numpy(float)
+    tid = u.TID.to_numpy(); cut = np.flatnonzero(tid[1:] != tid[:-1]) + 1
+    est = np.empty(len(u)); ant = np.full(len(u), np.nan); neu = np.zeros(len(u), bool)
+    for a0, a1 in zip(np.r_[0, cut], np.r_[cut, len(u)]):
+        m = mi[a0:a1] - mi[a0]; v = ev[a0:a1]
+        full = v[np.searchsorted(m, np.arange(m[-1] + 1), 'right') - 1]
+        c, n = neutralizar(full, max(float(np.nan_to_num(u.U.to_numpy()[a0:a1].max())), float(full.max())))
+        est[a0:a1] = c[m]; neu[a0:a1] = n[m]
+        k = m > 0; ant[a0:a1][k] = c[m[k] - 1]
+    u = u.assign(est_c=est, ant_c=ant, neut=neu)[['TID', 'mes', 'est_c', 'ant_c', 'neut']]
+    out = x[['TID', 'mes']].reset_index().merge(u, on=['TID', 'mes'], how='left').set_index('index')[['est_c', 'ant_c', 'neut']]
+    gap = x['Estoque no mes anterior'] - x.Vendas_qtd.fillna(0) + x.Distratos_qtd.fillna(0) - x['ESTOQUE TIPOLOGIA']
+    out['gap'] = gap
+    out['nao_fecha'] = gap.abs() > NAO_FECHA * x.UTOT.where(x.UTOT > 0, x.UTOT_TIP)
+    return out
+
 def cenario(d, bids, spec, INI, FIM, idx, SEMS):
     FAT = {k: idx[FIM.strftime('%Y-%m')] / v for k, v in idx.items()}
     x = recorte(d, bids, spec)
     t = x.sort_values(['TID', 'mes']).copy()
+    t = t.join(estoque_corrigido(t)) if len(t) else t.assign(est_c=[], ant_c=[], neut=[], gap=[], nao_fecha=[])
     t['lanc_m'] = t.lanc.dt.to_period('M').dt.to_timestamp()
-    t['sold'] = (t.UTOT_TIP - t['ESTOQUE TIPOLOGIA'] > 0) | (t.Vendas_qtd > 0)
+    t['sold'] = (t.UTOT_TIP - t.est_c > 0) | ((t.Vendas_qtd > 0) & ~t.neut.astype(bool))
     fs = t[t.sold].groupby('BID').mes.min(); orig = t.groupby('BID').lanc_m.first()
     eff = orig.copy(); novo = orig >= INI
     if spec.get('lancamento_efetivo', True): eff[novo] = fs.reindex(orig[novo].index)
     t['L'] = t.BID.map(eff); t = t[t.L.notna()]; t = t[t.mes >= t.L].copy()
     t['novo'] = t.BID.map(novo); t['prim'] = t.groupby('TID').mes.transform('min')
-    prev = t.groupby('TID')['ESTOQUE TIPOLOGIA'].shift(); ant = t['Estoque no mes anterior'].fillna(prev)
+    # vendas líquidas = estoque corrigido do mês anterior − estoque corrigido (o estoque fecha por construção);
+    # no nascimento da tipologia, a pré-venda = unidades − estoque. Tipologia que aparece no meio da base
+    # num empreendimento já lançado entra como estoque, sem venda.
     nasce = t.novo & (t.mes == t.prim)
-    t['oferta'] = np.where(nasce, t.UTOT_TIP, ant.fillna(0))
-    t['pv'] = np.where(nasce, (t.UTOT_TIP - t['ESTOQUE TIPOLOGIA']).clip(lower=0), 0)
-    t['vend'] = np.where(nasce, t.pv, t.Vendas_qtd - t.Distratos_qtd)
+    t['nasce'] = nasce
+    t['oferta'] = np.where(nasce, t.UTOT_TIP, t.ant_c.fillna(0))
+    t['pv'] = np.where(nasce, (t.UTOT_TIP - t.est_c).clip(lower=0), 0)
+    t['vend'] = np.where(nasce, t.pv, (t.ant_c - t.est_c).fillna(0))
     t['idade'] = ((t.mes.dt.year - t.L.dt.year) * 12 + (t.mes.dt.month - t.L.dt.month)).clip(lower=0)
     t['faixa'] = pd.cut(t.idade, [-1, 6, 12, 24, 999], labels=['0–6', '7–12', '13–24', '25+'])
     m2s = {m: s['label'] for s in SEMS for m in s['stats']}
     t['m'] = t.mes.dt.strftime('%Y-%m'); t['sem'] = t.m.map(m2s)
     A = t['APRIV TIPOLOGIA']
-    t['m2v'] = t.Vendas_qtd * A + np.where(t['PM2 Medio'].notna(), t.pv * A, 0)
-    t['rsv'] = t.Venda.fillna(0) + t.pv * A * t['PM2 Medio'].fillna(0)
-    t['m2e'] = np.where(t.VGV.notna(), t['ESTOQUE TIPOLOGIA'] * A, 0); t['rse'] = t.VGV.fillna(0)
+    # preço das vendidas: as vendas do Órulo limitadas às vendas líquidas do mês (recarga não vira venda)
+    q = np.minimum(t.Vendas_qtd.fillna(0), np.where(nasce, 0, t.vend.clip(lower=0)))
+    pu = np.where(t.Vendas_qtd > 0, t.Venda.fillna(0) / t.Vendas_qtd.where(t.Vendas_qtd > 0), 0)
+    t['m2v'] = q * A + np.where(t['PM2 Medio'].notna(), t.pv * A, 0)
+    t['rsv'] = q * pu + t.pv * A * t['PM2 Medio'].fillna(0)
+    fe = (t.est_c / t['ESTOQUE TIPOLOGIA'].where(t['ESTOQUE TIPOLOGIA'] > 0)).fillna(0)  # recarga: só o estoque corrigido pesa
+    t['m2e'] = np.where(t.VGV.notna(), t.est_c * A, 0); t['rse'] = t.VGV.fillna(0) * fe
     t['rsv_pres'] = t.rsv * t.m.map(FAT)
     return t
 
 def estoque(t, INI, FIM):
     meses = pd.date_range(INI, FIM, freq='MS'); out = []
     for tid, z in t.groupby('TID'):
-        U = z.UTOT_TIP.max(); s = z.set_index('mes')['ESTOQUE TIPOLOGIA'].groupby(level=0).last()
+        s = z.set_index('mes')['est_c'].groupby(level=0).last()  # já com recargas e zeramentos neutralizados
         full = s.reindex(pd.date_range(s.index.min(), FIM, freq='MS')).ffill(); full[full.index > s.index.max()] = 0
-        a = full.values.astype(float)
-        for i in range(1, len(a) - 1):  # neutraliza recarga de tabela de um mês só
-            if a[i] - a[i - 1] > 0.3 * U and a[i + 1] < a[i] - 0.3 * U: a[i] = a[i - 1]
-            elif a[i] < a[i - 1] - 0.3 * U and a[i + 1] > a[i] + 0.3 * U: a[i] = a[i - 1]
-        out.append(pd.Series(a, index=full.index))
+        out.append(full.astype(float))
     if not out: return pd.Series(0.0, index=meses)
     return pd.concat(out, axis=1).sum(axis=1).reindex(meses).fillna(0)
 
@@ -172,13 +232,32 @@ def conferencia(x):
     return {'conf': s, 'conf_orulo': int(x.conf_unidades_orulo), 'conf_processo': int(x.conf_unidades_processo),
             'conf_proc': x.conf_processo}
 
+def avisos_orulo(z):
+    """Meses neutralizados (recarga ou zeramento de tabela) e linhas que não fecham no Órulo, de um empreendimento."""
+    f = lambda w: sorted({m.strftime('%m/%y') for m in w.mes}, key=lambda k: (k[3:], k[:2]))
+    out = {}
+    r = z[z.neut.astype(bool)]
+    if len(r): out['recargas'] = f(r)
+    n = z[z.nao_fecha.astype(bool)]
+    if len(n): out['nao_fecha'] = f(n); out['nao_fecha_un'] = int(n.gap.abs().sum())
+    return out
+
 def resumo(t, INI, FIM, idx, SEMS):
     L = [s['label'] for s in SEMS]; m2s = {m: s['label'] for s in SEMS for m in s['meses']}
     r = {}
-    n = t[t.novo].drop_duplicates('TID'); n = n.assign(s=n.L.dt.strftime('%Y-%m').map(m2s))
+    n = t[t.nasce].drop_duplicates('TID'); n = n.assign(s=n.mes.dt.strftime('%Y-%m').map(m2s))
     r['lanc'] = [{'sem': s, 'unid': int(n[n.s == s].UTOT_TIP.sum()), 'emps': int(n[n.s == s].BID.nunique()),
                   'nomes': [f"{e} ({int(q)} un.)" for e, q in n[n.s == s].groupby('EMP').UTOT_TIP.sum().sort_values(ascending=False).items()]} for s in L]
     est = estoque(t, INI, FIM)
+    # tipologia que aparece no meio da base num empreendimento já lançado entra à venda sem ser lançamento;
+    # a que some da base com estoque sai sem venda
+    m2st = {m: s['label'] for s in SEMS for m in s['stats']}
+    pr = t[(t.mes == t.prim) & ~t.nasce & (t.mes > INI)]
+    ent = pr.groupby(pr.m.map(m2st)).est_c.sum()
+    nx = t[t.nasce & (t.est_c > t.UTOT_TIP)]  # nasceu com estoque acima das unidades da tipologia
+    ent = ent.add((nx.est_c - nx.UTOT_TIP).groupby(nx.m.map(m2st)).sum(), fill_value=0)
+    ul = t.sort_values('mes').groupby('TID').tail(1); ul = ul[(ul.mes < FIM) & (ul.est_c > 0)]
+    sai = ul.groupby((ul.mes + pd.offsets.MonthBegin(1)).dt.strftime('%Y-%m').map(m2st)).est_c.sum()
     u = t[t['sem'].notna()]
     base = u.groupby('faixa', observed=True).apply(lambda z: z.vend.sum() / z.oferta.sum() if z.oferta.sum() else np.nan)
     u = u.assign(esp=u.oferta * u.faixa.map(base).astype(float))
@@ -206,14 +285,16 @@ def resumo(t, INI, FIM, idx, SEMS):
             'estoque_fim': int(est[fim_m]), 'rs_m2_vendido': nz(row.rsv / row.m2v if row is not None and row.m2v else np.nan, round),
             'idx_mesmos': None if pd.isna(ip[i]) else round(ip[i], 1), 'n_comuns': nc[i],
             'incc_idx': round(inccsem[lab] / inccsem[L[0]] * 100, 1),
-            'a_venda': int(ini_est) + r['lanc'][i]['unid']})
+            'a_venda': int(ini_est) + int(n[n.mes.dt.strftime('%Y-%m').isin(s['stats'])].UTOT_TIP.sum()) + int(ent.get(lab, 0)),
+            'entradas': int(ent.get(lab, 0)), 'saidas': int(sai.get(lab, 0))})
+        x = r['sem'][-1]; x['nao_fecha'] = x['a_venda'] - x['vendidas'] - x['saidas'] - x['estoque_fim']  # tem de dar 0
     # safras por ano de lançamento
     m2a = {m: s['ano'] for s in SEMS for m in s['meses']}
     a = t[t.novo].copy(); a['safra'] = a.L.dt.strftime('%Y-%m').map(m2a)
     out = []
     for tid, z in a.groupby('TID'):
         U = z.UTOT_TIP.max(); l = z.L.iloc[0]; maxk = (FIM.year - l.year) * 12 + FIM.month - l.month
-        e = z.set_index('idade')['ESTOQUE TIPOLOGIA'].groupby(level=0).last(); last = e.index.max()
+        e = z.set_index('idade')['est_c'].groupby(level=0).last(); last = e.index.max()
         full = e.reindex(range(0, maxk + 1)).ffill(); full[full.index > last] = 0
         for k, v in full.items():
             if pd.notna(v): out.append((z.safra.iloc[0], z.BID.iloc[0], tid, k, U, v))
@@ -245,8 +326,8 @@ def resumo(t, INI, FIM, idx, SEMS):
         last = z[z.mes == z.mes.max()]
         det.append({'emp': z.EMP.iloc[0], 'incorp': z.INCORP.iloc[0], 'lanc': z.L.iloc[0].strftime('%m/%y') if z.novo.iloc[0] else 'antes do período',
                     'unid': int(z.drop_duplicates('TID').UTOT_TIP.sum()), 'unid_projeto': int(z.UTOT.max()),
-                    'estoque': int(last['ESTOQUE TIPOLOGIA'].sum()) if z.mes.max() == FIM else 0,
-                    **conferencia(z.iloc[0])})
+                    'estoque': int(last['est_c'].sum()) if z.mes.max() == FIM else 0,
+                    **conferencia(z.iloc[0]), **avisos_orulo(z)})
     r['emps_det'] = sorted(det, key=lambda x: x['emp'])
     return r
 
