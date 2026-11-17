@@ -44,4 +44,4 @@ Sombras: `barreira` tira quem fica do outro lado da linha, olhando do pin (o seg
 - Linhas do Órulo que não fecham (estoque anterior − vendas + distratos ≠ estoque, diferença acima de 5% das unidades do projeto) e os meses neutralizados ficam marcados na lista de empreendimentos (`nao_fecha`, `recargas`). As safras e o índice de preço usam o estoque corrigido.
 - VSO = Σ vendas ÷ Σ oferta, mês a mês. Índice = vendas ÷ esperadas pelo VSO de cada faixa de idade (0–6, 7–12, 13–24, 25+) do próprio cenário.
 - Preço nominal = R$/m² médio das vendidas; ajuste % = índice encadeado dos mesmos empreendimentos (R$/m² de tabela do estoque); INCC-M médio do semestre.
-- Safras por ano de lançamento; curva até onde há dados de ≥ 75% das unidades da safra, até 24 meses.
+- Safras por ano de lançamento; curva e tabela por idade do empreendimento até 24 meses. Em cada idade entram todos os empreendimentos da safra que já chegaram nela (sem corte de cobertura desde 17/nov/2026, decisão do Moises; lançados há menos de 3 meses do fim da base ficam fora da safra; antes só aparecia com ≥ 75% das unidades da safra); `n` = empreendimentos no ponto, `cob` = fração das unidades da safra.

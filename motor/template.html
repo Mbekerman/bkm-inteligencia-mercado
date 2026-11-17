@@ -103,8 +103,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <section id="pct"><h2>Ajuste de preço × INCC</h2><p class="def">Variação acumulada desde o primeiro semestre do R$/m² de tabela do estoque, nos mesmos empreendimentos de um semestre para o outro. Na tabela, entre parênteses, a variação no semestre.</p><div class="grid2" data-r></div></section>
 <section id="vso"><h2>VSO por semestre</h2><p class="def">Vendas líquidas ÷ oferta, somadas mês a mês dentro do semestre.</p><div class="grid2" data-r></div></section>
 <section id="indice"><h2>Índice de velocidade ajustado pela idade</h2><p class="def">Vendas do semestre ÷ vendas esperadas pela idade do estoque, usando o VSO de cada faixa de idade (0–6, 7–12, 13–24 e 25+ meses) do próprio cenário. 1,0 = ritmo médio do cenário.</p><div class="grid2" data-r></div></section>
-<section id="curvas"><h2>Curva de venda por idade</h2><p class="def">% vendido acumulado por safra de lançamento, somando as unidades da safra. A curva vai até onde há dados de pelo menos 75% das unidades da safra.</p><div class="grid2" data-r></div></section>
-<section id="tabela"><h2>Venda por idade</h2><p class="def">% vendido no fim de cada janela de idade; R$/m² médio vendido dentro da janela, nominal e corrigido pelo INCC-M até o último mês da base.</p><div class="grid2 um" data-r></div></section>
+<section id="curvas"><h2>Curva de venda por idade do empreendimento</h2><p class="def">% vendido acumulado por safra de lançamento, pela idade (meses desde a primeira venda). Em cada idade entram todos os empreendimentos da safra que já chegaram nela, somando as unidades; lançados há menos de 3 meses ficam de fora; passe o mouse para ver quantos. Pontos com poucos empreendimentos oscilam mais.</p><div class="grid2" data-r></div></section>
+<section id="tabela"><h2>Venda por idade do empreendimento</h2><p class="def">% vendido no fim de cada janela de idade, entre os empreendimentos que já chegaram nela (quantidade entre parênteses); R$/m² médio vendido dentro da janela, nominal e corrigido pelo INCC-M até o último mês da base.</p><div class="grid2 um" data-r></div></section>
 
 <p class="foot" id="foot"></p>
 </div>
@@ -252,10 +252,11 @@ overlay('indice','indice',{lo:Math.min(0,minOf(d=>d.sem.map(x=>x.indice??0)))-.2
 cols('curvas',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.className='mini';m.innerHTML=`<div class="t"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</div>`;c.appendChild(m);
   const d=g(s,r);const K=[...Array(25).keys()];const cats=K.map(String);
   const V=SAF.map(sf=>K.map(k=>{const p=d.curvas.find(x=>x.s==sf&&x.k==k);return p?p.p:null}));
+  const N=SAF.map(sf=>K.map(k=>{const p=d.curvas.find(x=>x.s==sf&&x.k==k);return p&&p.n!=null?p.n:''}));
   const div=chartDiv(m);reg(div,()=>{const f=frame(div,{h:220,lo:0,hi:1,yfmt:v=>fp(v,0),cats,xlab:false});
     [0,6,12,18,24].forEach(k=>txt(f.svg,f.X(k),f.h-10,k===24?'24 meses':k));
     lines(f,SAF.map((sf,q)=>({v:V[q],c:SCOR[q],dash:SDASH[q],dots:false})).reverse());
-    hover(f,k=>`<div class="h">${NOME[i]} · mês ${k} · ${r} km</div>`+SAF.map((sf,q)=>row(swLn(SCOR[q],SCLS[q]),'Safra '+sf,fp(V[q][k],0))).join(''))});
+    hover(f,k=>`<div class="h">${NOME[i]} · mês ${k} · ${r} km</div>`+SAF.map((sf,q)=>row(swLn(SCOR[q],SCLS[q]),'Safra '+sf,V[q][k]==null?'–':fp(V[q][k],0)+` <span class="n" style="display:inline">(${N[q][k]} emp.)</span>`)).join(''))});
   const lg=document.createElement('div');lg.className='legend';lg.style.marginTop='0';lg.style.fontSize='13px';
   lg.innerHTML=SAF.map((sf,q)=>`<span class="lg" style="font-weight:400"><span class="ln ${SCLS[q]}" style="color:${SCOR[q]}"></span>${sf}: ${(d.safras[sf]||{emps:0}).emps} emp. · ${f0((d.safras[sf]||{unid:0}).unid)} un.</span>`).join('');m.appendChild(lg);}))
 
@@ -264,7 +265,7 @@ const JAN=[[3,'0 a 3'],[6,'4 a 6'],[9,'7 a 9'],[12,'10 a 12'],[18,'13 a 18'],[24
 cols('tabela',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.className='mini';m.innerHTML=`<div class="t"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</div>`;c.appendChild(m);
   const d=g(s,r),cell=(sf,k,f)=>{const x=d.tabela_idade.find(t=>t.s==sf&&t.idade==k);return x&&x[f]!=null?x[f]:null};
   const grp=`<tr class="grp"><th></th>${SAF.map(sf=>`<th colspan="3">Safra ${sf} <span style="color:var(--muted);font-weight:400">(${(d.safras[sf]||{emps:0}).emps} emp. · ${f0((d.safras[sf]||{unid:0}).unid)} un.)</span></th>`).join('')}</tr>`;
-  table(m,['Idade (meses)',...SAF.flatMap(()=>['% vend.','R$/m²','R$/m² out/26'])],JAN.map(([k,l])=>[l,...SAF.flatMap(sf=>[fp(cell(sf,k,'pct'),0),f0(cell(sf,k,'rs_m2')),`<b>${f0(cell(sf,k,'rs_m2_hoje'))}</b>`])]),grp)}))
+  table(m,['Idade (meses)',...SAF.flatMap(()=>['% vend.','R$/m²','R$/m² out/26'])],JAN.map(([k,l])=>[l,...SAF.flatMap(sf=>[cell(sf,k,'pct')==null?fp(null,0):fp(cell(sf,k,'pct'),0)+(cell(sf,k,'n')?` <span style="color:var(--muted)">(${cell(sf,k,'n')})</span>`:''),f0(cell(sf,k,'rs_m2')),`<b>${f0(cell(sf,k,'rs_m2_hoje'))}</b>`])]),grp)}))
 
 // redesenho
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>renders.forEach(([d,f])=>f()),120)});

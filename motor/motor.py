@@ -294,6 +294,7 @@ def resumo(t, INI, FIM, idx, SEMS):
     out = []
     for tid, z in a.groupby('TID'):
         U = z.UTOT_TIP.max(); l = z.L.iloc[0]; maxk = (FIM.year - l.year) * 12 + FIM.month - l.month
+        if maxk < 3: continue  # lançado há menos de 3 meses: ainda não chegou ao primeiro recorte (0 a 3)
         e = z.set_index('idade')['est_c'].groupby(level=0).last(); last = e.index.max()
         full = e.reindex(range(0, maxk + 1)).ffill(); full[full.index > last] = 0
         for k, v in full.items():
@@ -302,21 +303,23 @@ def resumo(t, INI, FIM, idx, SEMS):
     SAF = sorted(c.safra.unique().tolist()) if len(c) else []
     r['safras_lista'] = SAF
     if len(c):
-        cc = c.groupby(['safra', 'k']).agg(U=('U', 'sum'), est=('est', 'sum')).reset_index(); cc['vendido'] = 1 - cc.est / cc.U
+        # em cada idade, todos os empreendimentos que já chegaram nela (sem corte de cobertura; decisão do Moises, 17/nov/2026)
+        cc = c.groupby(['safra', 'k']).agg(U=('U', 'sum'), est=('est', 'sum'), n=('BID', 'nunique')).reset_index(); cc['vendido'] = 1 - cc.est / cc.U
         tot = c.drop_duplicates('TID').groupby('safra').U.sum(); cc['cob'] = cc.U / cc.safra.map(tot)
-        cc = cc[(cc.cob >= 0.75) & (cc.k <= 24)]
+        cc = cc[cc.k <= 24]
     else:
-        cc = pd.DataFrame(columns=['safra', 'k', 'vendido']); tot = pd.Series(dtype=float)
+        cc = pd.DataFrame(columns=['safra', 'k', 'vendido', 'n', 'U', 'cob']); tot = pd.Series(dtype=float)
     r['safras'] = {s: {'emps': int(c[c.safra == s].BID.nunique()), 'unid': int(tot.get(s, 0))} for s in SAF}
-    r['curvas'] = [{'s': x.safra, 'k': int(x.k), 'p': round(x.vendido, 3)} for x in cc.itertuples()]
+    r['curvas'] = [{'s': x.safra, 'k': int(x.k), 'p': round(x.vendido, 3), 'n': int(x.n), 'u': int(x.U), 'cob': round(x.cob, 3)} for x in cc.itertuples()]
     jan = [(3, 0, 3), (6, 4, 6), (9, 7, 9), (12, 10, 12), (18, 13, 18), (24, 19, 24)]
     tab = []
     for s in SAF:
         z = a[a.safra == s]
         for k, k0, k1 in jan:
-            w = z[(z.idade >= k0) & (z.idade <= k1)]; pv = cc[(cc.safra == s) & (cc.k == k)].vendido
-            ok = w.m2v.sum() > 0 and len(pv)
+            w = z[(z.idade >= k0) & (z.idade <= k1)]; pk = cc[(cc.safra == s) & (cc.k == k)]; pv = pk.vendido
+            ok = w.m2v.sum() > 0
             tab.append({'s': s, 'idade': k, 'pct': round(float(pv.iloc[0]), 3) if len(pv) else None,
+                        'n': int(pk.n.iloc[0]) if len(pk) else 0,
                         'rs_m2': round(w.rsv.sum() / w.m2v.sum()) if ok else None,
                         'rs_m2_hoje': round(w.rsv_pres.sum() / w.m2v.sum()) if ok else None})
     r['tabela_idade'] = tab
