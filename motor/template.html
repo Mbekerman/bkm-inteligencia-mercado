@@ -100,10 +100,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 <section id="lanc"><h2>Lançamentos</h2><p class="def">Unidades lançadas por semestre. Passe o mouse para ver os empreendimentos.</p><div class="grid2" data-r></div></section>
 <section id="oferta"><h2>Unidades à venda, vendas e estoque</h2><p class="def">Linha cheia: à venda no semestre (estoque inicial + lançadas). Tracejada: vendidas no semestre, líquidas de distratos. Barra: estoque no fim do semestre. Escala comum a todos os gráficos.</p><div class="grid2" data-r></div></section>
 <section id="lancvend"><h2>Lançadas × vendidas</h2><p class="def">Linha cheia: unidades lançadas no semestre. Tracejada: unidades vendidas no semestre, líquidas de distratos (de todo o estoque, não só dos lançamentos). Escala comum a todos os gráficos.</p><div class="grid2" data-r></div></section>
-<section id="preco"><h2>Preço nominal × INCC</h2><p class="def">R$/m² médio das unidades vendidas no semestre, ponderado pela área vendida. Tracejada: o R$/m² do primeiro semestre corrigido pelo INCC-M. Escala comum; o eixo não começa em zero.</p><div class="grid2" data-r></div></section>
-<section id="pct"><h2>Ajuste de preço × INCC</h2><p class="def">Variação acumulada desde o primeiro semestre do R$/m² de tabela do estoque, nos mesmos empreendimentos de um semestre para o outro. Na tabela, entre parênteses, a variação no semestre.</p><div class="grid2" data-r></div></section>
 <section id="vso"><h2>VSO por semestre</h2><p class="def">Vendas líquidas ÷ oferta, somadas mês a mês dentro do semestre.</p><div class="grid2" data-r></div></section>
-<section id="indice"><h2>Índice de velocidade ajustado pela idade</h2><p class="def">Vendas do semestre ÷ vendas esperadas pela idade do estoque, usando o VSO de cada faixa de idade (0–6, 7–12, 13–24 e 25+ meses) do próprio cenário. 1,0 = ritmo médio do cenário.</p><div class="grid2" data-r></div></section>
 <section id="curvas"><h2>Curva de venda por idade do empreendimento</h2><p class="def">% vendido acumulado por safra de lançamento, pela idade (meses desde a primeira venda). Em cada idade entram todos os empreendimentos da safra que já chegaram nela, somando as unidades; lançados há menos de 3 meses ficam de fora; passe o mouse para ver quantos. Pontos com poucos empreendimentos oscilam mais.</p><div class="grid2" data-r></div></section>
 <section id="tabela"><h2>Venda por idade do empreendimento</h2><p class="def">% vendido no fim de cada janela de idade, entre os empreendimentos que já chegaram nela (quantidade entre parênteses); R$/m² médio vendido dentro da janela, nominal e corrigido pelo INCC-M até o último mês da base.</p><div class="grid2 um" data-r></div></section>
 
@@ -189,7 +186,7 @@ const maxOf=(fn)=>Math.max(...RAIOS.flatMap(r=>SC.flatMap(s=>fn(g(s,r)))));
 const minOf=(fn)=>Math.min(...RAIOS.flatMap(r=>SC.flatMap(s=>fn(g(s,r)))));
 
 // legenda e cartões
-document.getElementById('legenda').innerHTML=NOME.map((n,i)=>`<span class="lg"><span class="sq" style="background:${COR[i]}"></span>${n}</span>`).join('')+`<span class="lg" style="color:var(--incc)"><span class="ln d"></span><span style="color:var(--fg)">INCC-M</span></span>`;
+document.getElementById('legenda').innerHTML=NOME.map((n,i)=>`<span class="lg"><span class="sq" style="background:${COR[i]}"></span>${n}</span>`).join('');
 document.getElementById('h1').textContent=META.titulo;
 document.getElementById('sub').textContent=META.subtitulo;
 document.getElementById('rec').innerHTML=META.recortes.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join('');
@@ -225,16 +222,6 @@ cols('lancvend',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');
     hover(f,j=>`<div class="h">${NOME[i]} · ${CAT[j]} · ${r} km</div>`+row(swLn(COR[i]),'Lançadas',f0(L[j]))+row(swLn('var(--fg)','d'),'Vendidas',f0(V[j]))+row('','Lançadas − vendidas',f0(L[j]-V[j])))});
   table(m,['',...CAT,'Total'],[['Lançadas',...L.map(f0),`<b>${f0(L.reduce((a,b)=>a+b,0))}</b>`],['Vendidas',...V.map(f0),`<b>${f0(V.reduce((a,b)=>a+b,0))}</b>`]]);}))}
 
-// 3 preço nominal
-{const vals=RAIOS.flatMap(r=>SC.flatMap(s=>g(s,r).sem.flatMap(x=>[x.rs_m2_vendido,g(s,r).sem[0].rs_m2_vendido*x.incc_idx/100])));
-const lo=Math.min(...vals)*.97,hi=Math.max(...vals)*1.02;
-cols('preco',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.className='mini';m.innerHTML=`<div class="t"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</div>`;c.appendChild(m);
-  const d=g(s,r).sem,b=d[0].rs_m2_vendido,inc=d.map(x=>b*x.incc_idx/100);const div=chartDiv(m);
-  reg(div,()=>{const f=frame(div,{h:190,lo,hi,yfmt:v=>f0(v)});lines(f,[{v:inc,c:'var(--incc)',dash:'7 5',dots:false},{v:d.map(x=>x.rs_m2_vendido),c:COR[i]}]);
-    hover(f,j=>`<div class="h">${NOME[i]} · ${CAT[j]} · ${r} km</div>`+row(swLn(COR[i]),'R$/m² vendido','R$ '+f0(d[j].rs_m2_vendido))+row(swLn('var(--incc)','d'),'1S24 corrigido pelo INCC','R$ '+f0(inc[j]))+row('','Diferença',fp(d[j].rs_m2_vendido/inc[j]-1,1,true))+row('','Unidades vendidas',f0(d[j].vendidas)))});
-  table(m,['',...CAT],[[`<span class="k">${swLn(COR[i])}R$/m² vendido</span>`,...d.map(x=>f0(x.rs_m2_vendido))],[`<span class="k">${swLn('var(--incc)','d')}INCC</span>`,...inc.map(f0)]]);}))}
-
-// series overlay helper
 function overlay(sec,key,{lo,hi,yfmt,cellfmt,tipRows,ref,incc}){
   cols(sec,(c,r)=>{const div=chartDiv(c);const S=SC.map(s=>g(s,r).sem.map(x=>x[key]));const I=incc?incc(r):null;
     reg(div,()=>{const f=frame(div,{h:300,lo,hi,yfmt});
@@ -244,19 +231,9 @@ function overlay(sec,key,{lo,hi,yfmt,cellfmt,tipRows,ref,incc}){
     const rows=SC.map((s,i)=>[kSq(i),...S[i].map((v,j)=>cellfmt(v,j,S[i]))]);
     if(I)rows.push([`<span class="k">${swLn('var(--incc)','d')}INCC-M</span>`,...I.map((v,j)=>cellfmt(v,j,I))]);
     table(c,['',...CAT],rows)})}
-
-// 4 pct
-for(const s of SC)for(const r of RAIOS)g(s,r).sem.forEach(x=>x.ac=x.idx_mesmos==null?null:x.idx_mesmos/100-1);
-overlay('pct','ac',{lo:Math.min(0,minOf(d=>d.sem.map(x=>x.ac??0))),hi:Math.max(.05,maxOf(d=>d.sem.map(x=>Math.max(x.ac??0,x.incc_idx/100-1))))*1.1,yfmt:v=>fp(v,0,true),incc:r=>g(SC[0],r).sem.map(x=>x.incc_idx/100-1),
-  cellfmt:(v,j,a)=>v==null?'–':fp(v,1,true)+(j?` <span style="color:var(--muted)">(${fp((1+v)/(1+a[j-1])-1,1,true)})</span>`:''),
-  tipRows:(d,j,i)=>row(swSq(COR[i]),NOME[i],d[j].ac==null?'–':fp(d[j].ac,1,true)+(j?` (${fp((1+d[j].ac)/(1+d[j-1].ac)-1,1,true)} no sem.)`:''))+(j?`<div class="n">${d[j].n_comuns} empreendimentos comparáveis</div>`:'')});
 // 5 vso
 overlay('vso','vso',{lo:Math.min(0,minOf(d=>d.sem.map(x=>x.vso??0)))-.02,hi:maxOf(d=>d.sem.map(x=>x.vso??0))*1.1+.01,yfmt:v=>fp(v,0),cellfmt:v=>fp(v),
   tipRows:(d,j,i)=>row(swSq(COR[i]),NOME[i],fp(d[j].vso))+`<div class="n">${f0(d[j].vendidas)} vendidas · oferta média ${f0(d[j].oferta_mes)} un./mês · ${d[j].emps} emp.</div>`});
-// 6 indice
-overlay('indice','indice',{lo:Math.min(0,minOf(d=>d.sem.map(x=>x.indice??0)))-.2,hi:Math.max(1.5,maxOf(d=>d.sem.map(x=>x.indice??0)))*1.08,yfmt:v=>v.toLocaleString('pt-BR',{maximumFractionDigits:1}),cellfmt:f2,ref:1,
-  tipRows:(d,j,i)=>row(swSq(COR[i]),NOME[i],f2(d[j].indice))+`<div class="n">${f0(d[j].vendidas)} vendidas × ${f0(d[j].esperadas)} esperadas pela idade</div>`});
-
 // 7 curvas
 cols('curvas',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.className='mini';m.innerHTML=`<div class="t"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</div>`;c.appendChild(m);
   const d=g(s,r);const K=[...Array(25).keys()];const cats=K.map(String);

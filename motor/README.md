@@ -1,6 +1,6 @@
 # Inteligência de Mercado BKM
 
-Gera o relatório de mercado (lançamentos; à venda, vendas e estoque; preço × INCC; VSO; índice de velocidade; curvas e tabela de venda por idade) a partir do relatório do Órulo (tipologia × mês).
+Gera o relatório de mercado (lançamentos; à venda, vendas e estoque; lançadas × vendidas; VSO; curvas e tabela de venda por idade do empreendimento. Preço × INCC, ajuste de preço e índice de velocidade saíram da página em 17/nov/2026 a pedido do Moises; os números continuam no resultado) a partir do relatório do Órulo (tipologia × mês).
 
 ## Arquivos
 - `preparar.py "<relatorio.xlsx>"`: converte o xlsx do Órulo em `cache/base.pkl` (~1 min). Rode de novo quando chegar relatório novo.
