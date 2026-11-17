@@ -46,3 +46,11 @@ Sombras: `barreira` tira quem fica do outro lado da linha, olhando do pin (o seg
 - Preço nominal = R$/m² médio das vendidas; ajuste % = índice encadeado dos mesmos empreendimentos (R$/m² de tabela do estoque); INCC-M médio do semestre.
 - Sem informação de venda (decisão do Moises, 17/nov/2026): empreendimento que está na base há 6 meses ou mais e, no último mês em que aparece, tem estoque igual ao total de unidades (todas as tipologias) sai do relatório inteiro e é listado em Exclusões. Ex.: Sol Connection Mooca, 326 de 326 em estoque desde jun/25.
 - Safras por ano de lançamento; curva e tabela por idade do empreendimento até 24 meses. Em cada idade entram todos os empreendimentos da safra que já chegaram nela (sem corte de cobertura desde 17/nov/2026, decisão do Moises; lançados há menos de 3 meses do fim da base ficam fora da safra; antes só aparecia com ≥ 75% das unidades da safra); `n` = empreendimentos no ponto, `cob` = fração das unidades da safra.
+
+## Mapa (17/nov/2026)
+Cada cenário leva em `meta.cenarios[].geo` o pin, os raios, a geometria das sombras (linhas das barreiras, círculos
+de exclusão, polígonos) e as estações até 1 km além do maior raio. A seção "Mapa" do template desenha isso no
+Google Maps com a chave que o app de relatórios injeta (`window.BKM_MAPS_KEY`); shoppings e hipermercados vêm da
+API Places na hora de abrir a página (só redes de hiper e atacarejo, dentro do maior raio). Sem chave (link direto
+do serviço de mercado) a seção mostra um aviso. `window.__mapaPronto` vira `true` quando os mapas terminam, e o
+PDF do app espera por ele.

@@ -95,6 +95,43 @@ def aplicar_sombras(emps, pin, sombras):
             sys.exit(f'Tipo de sombra desconhecido: {t}')
     return fica, textos
 
+def geo_cenario(pin, sombras, raios):
+    """Geometria do mapa do relatório: pin, raios, sombras desenháveis e estações até 1 km além do maior raio."""
+    R = max(raios); out = []
+    for s in sombras or []:
+        t = s['tipo']
+        if t == 'barreira':
+            path = s['geojson'] if os.path.isabs(s['geojson']) else os.path.join(PKG, s['geojson'])
+            linhas = []
+            for f in json.load(open(path))['features']:
+                g = f['geometry']
+                partes = [g['coordinates']] if g['type'] == 'LineString' else g['coordinates']
+                linhas += [[[round(c[1], 5), round(c[0], 5)] for c in p] for p in partes]
+            out.append({'tipo': 'barreira', 'nome': s.get('nome', ''), 'linhas': linhas})
+        elif t == 'raio':
+            pontos = []
+            if 'estacoes' in s:
+                import unicodedata
+                norm = lambda z: ''.join(ch for ch in unicodedata.normalize('NFD', z.upper()) if ch.isalnum())
+                alvo = {norm(n) for n in s['estacoes']}
+                pontos += [[e['lat'], e['lon']] for e in estacoes() if norm(e['nome']) in alvo]
+            if 'lat' in s: pontos.append([s['lat'], s['lon']])
+            out.append({'tipo': 'raio', 'km': s['km'], 'nome': s.get('nome') or ', '.join(s.get('estacoes', [])), 'pontos': pontos})
+        elif t == 'poligono':
+            path = s['geojson'] if os.path.isabs(s['geojson']) else os.path.join(PKG, s['geojson'])
+            aneis = []
+            for f in json.load(open(path))['features']:
+                g = f['geometry']
+                aneis += [g['coordinates'][0]] if g['type'] == 'Polygon' else [p[0] for p in g['coordinates']]
+            out.append({'tipo': 'poligono', 'nome': s.get('nome', ''), 'aneis': [[[round(c[1], 5), round(c[0], 5)] for c in a] for a in aneis]})
+    E = estacoes(); lat = pd.Series([e['lat'] for e in E]); lon = pd.Series([e['lon'] for e in E])
+    perto = dist_km(lat, lon, pin['lat'], pin['lon']) <= R + 1
+    vistos, est = set(), []
+    for e, ok in zip(E, perto):
+        if ok and (e['nome'], e['linha']) not in vistos:
+            vistos.add((e['nome'], e['linha'])); est.append({k: e[k] for k in ('nome', 'linha', 'empresa', 'lat', 'lon')})
+    return {'pin': {'lat': pin['lat'], 'lon': pin['lon']}, 'raios': raios, 'sombras': out, 'estacoes': est}
+
 # ---------------------------------------------------------------- semestres
 def semestres(ini, fim):
     meses = pd.date_range(ini, fim, freq='MS')
@@ -375,7 +412,8 @@ def calcular(spec, d=None):
             dados[f'{cid}_{R}'] = resumo(t, INI, FIM, idx, SEMS); cont[str(R)] = len(dados[f'{cid}_{R}']['emps'])
             pass
         meta_c.append({'id': cid, 'nome': c['nome'], 'pin': c['pin'].get('descricao') or f"{c['pin']['lat']:.5f}, {c['pin']['lon']:.5f}",
-                       'sombras': [x for x in textos if x] or ['Sem sombra'], 'n': cont, 'sem_venda': sv})
+                       'sombras': [x for x in textos if x] or ['Sem sombra'], 'n': cont, 'sem_venda': sv,
+                       'geo': geo_cenario(c['pin'], c.get('sombras'), raios)})
         sem_venda_txt.extend(sv)
     tp = spec.get('tipologia', {})
     faixa = f"Tipologias de {tp.get('area_min','?')} a {tp.get('area_max','?')} m² de área privativa".replace('.', ',')
