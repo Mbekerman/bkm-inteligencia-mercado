@@ -128,6 +128,7 @@ def recorte(d, bids, spec):
 SALTO = 0.3    # salto maior que 30% das unidades da tipologia
 JANELA = 2     # que volta em até 2 meses = recarga ou zeramento de tabela do Órulo
 NAO_FECHA = 0.05  # linha do Órulo que não fecha acima de 5% das unidades do projeto
+MESES_SEM_VENDA = 6  # na base há pelo menos isso sem nenhuma venda líquida = sem informação de venda
 
 def neutralizar(a, U, salto=SALTO, janela=JANELA):
     """Série mensal de estoque de uma tipologia → (série corrigida, meses neutralizados).
@@ -347,10 +348,22 @@ def calcular(spec, d=None):
     ok = utot >= spec.get('min_unidades_projeto', 0)
     if spec.get('excluir_nr', True): ok &= ~nomes.str.contains(r'- NR\b|NR$', regex=True)
     for nm in spec.get('excluir_nomes', []): ok &= ~nomes.str.contains(nm, case=False, regex=False)
+    # sem informação de venda (decisão do Moises, 17/nov/2026): na base há 6 meses ou mais e, no último mês em que
+    # aparece, o estoque de todas as tipologias ainda é igual ao total de unidades (nada vendido). Sai de tudo.
+    ult = d[d.mes == d.groupby('BID').mes.transform('max')].drop_duplicates('TID')
+    pr = ult.groupby('BID').agg(est=('ESTOQUE TIPOLOGIA', 'sum'), U=('UTOT_TIP', 'sum'))
+    desde = d.groupby('BID').mes.min()
+    sem_venda = (pr.est >= pr.U) & (pr.U > 0) & (desde <= FIM - pd.DateOffset(months=MESES_SEM_VENDA))
+    sem_venda = sem_venda.reindex(ok.index, fill_value=False)
+    ok_antes = ok.copy(); ok &= ~sem_venda
     emps = d.groupby('BID').agg(lat=('lat', 'first'), lon=('lon', 'first')).loc[ok[ok].index]
-    raios = spec['raios_km']; dados = {}; meta_c = []
+    todos = d.groupby('BID').agg(lat=('lat', 'first'), lon=('lon', 'first'))
+    fora = todos.loc[(ok_antes & sem_venda)[lambda x: x].index]
+    raios = spec['raios_km']; dados = {}; meta_c = []; sem_venda_txt = []
     for i, c in enumerate(spec['cenarios']):
         cid = c.get('id') or f'c{i+1}'
+        f = fora.copy(); f['km'] = dist_km(f.lat, f.lon, c['pin']['lat'], c['pin']['lon'])
+        sv = sorted(nomes.loc[f[f.km <= max(raios)].index].tolist())
         e = emps.copy(); e['km'] = dist_km(e.lat, e.lon, c['pin']['lat'], c['pin']['lon'])
         e = e[e.km <= max(raios)]
         fica, textos = aplicar_sombras(e, c['pin'], c.get('sombras'))
@@ -362,12 +375,16 @@ def calcular(spec, d=None):
             dados[f'{cid}_{R}'] = resumo(t, INI, FIM, idx, SEMS); cont[str(R)] = len(dados[f'{cid}_{R}']['emps'])
             pass
         meta_c.append({'id': cid, 'nome': c['nome'], 'pin': c['pin'].get('descricao') or f"{c['pin']['lat']:.5f}, {c['pin']['lon']:.5f}",
-                       'sombras': [x for x in textos if x] or ['Sem sombra'], 'n': cont})
+                       'sombras': [x for x in textos if x] or ['Sem sombra'], 'n': cont, 'sem_venda': sv})
+        sem_venda_txt.extend(sv)
     tp = spec.get('tipologia', {})
     faixa = f"Tipologias de {tp.get('area_min','?')} a {tp.get('area_max','?')} m² de área privativa".replace('.', ',')
     if tp.get('dorms'): faixa += f", {'/'.join(map(str, tp['dorms']))} dormitório(s)"
     exc = (['Empreendimentos NR'] if spec.get('excluir_nr', True) else []) + spec.get('excluir_nomes', [])
     if spec.get('min_unidades_projeto'): exc.append(f"empreendimentos com menos de {spec['min_unidades_projeto']} unidades no total")
+    sv = sorted(set(sem_venda_txt))
+    exc.append(f"empreendimentos sem informação de venda (há {MESES_SEM_VENDA}+ meses na base com estoque = unidades)"
+               + (f": {', '.join(sv)}" if sv else ': nenhum no raio'))
     labs = [s['label'] for s in SEMS]
     sem_txt = f"{labs[0]} a {labs[-1]}" + (f"; {labs[-1]} tem {SEMS[-1]['n']} meses" if SEMS[-1]['n'] < 6 else '')
     if len(SEMS[0]['meses']) > len(SEMS[0]['stats']): sem_txt += f"; os lançamentos de {MESES[INI.month-1]}/{str(INI.year)[2:]} entram no {labs[0]}"
