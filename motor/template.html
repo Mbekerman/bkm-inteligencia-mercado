@@ -99,6 +99,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 <section id="lanc"><h2>Lançamentos</h2><p class="def">Unidades lançadas por semestre. Passe o mouse para ver os empreendimentos.</p><div class="grid2" data-r></div></section>
 <section id="oferta"><h2>Unidades à venda, vendas e estoque</h2><p class="def">Linha cheia: à venda no semestre (estoque inicial + lançadas). Tracejada: vendidas no semestre, líquidas de distratos. Barra: estoque no fim do semestre. Escala comum a todos os gráficos.</p><div class="grid2" data-r></div></section>
+<section id="lancvend"><h2>Lançadas × vendidas</h2><p class="def">Linha cheia: unidades lançadas no semestre. Tracejada: unidades vendidas no semestre, líquidas de distratos (de todo o estoque, não só dos lançamentos). Escala comum a todos os gráficos.</p><div class="grid2" data-r></div></section>
 <section id="preco"><h2>Preço nominal × INCC</h2><p class="def">R$/m² médio das unidades vendidas no semestre, ponderado pela área vendida. Tracejada: o R$/m² do primeiro semestre corrigido pelo INCC-M. Escala comum; o eixo não começa em zero.</p><div class="grid2" data-r></div></section>
 <section id="pct"><h2>Ajuste de preço × INCC</h2><p class="def">Variação acumulada desde o primeiro semestre do R$/m² de tabela do estoque, nos mesmos empreendimentos de um semestre para o outro. Na tabela, entre parênteses, a variação no semestre.</p><div class="grid2" data-r></div></section>
 <section id="vso"><h2>VSO por semestre</h2><p class="def">Vendas líquidas ÷ oferta, somadas mês a mês dentro do semestre.</p><div class="grid2" data-r></div></section>
@@ -215,6 +216,14 @@ cols('oferta',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.
     lines(f,[{v:d.map(x=>x.a_venda),c:'var(--fg)'},{v:d.map(x=>x.vendidas),c:'var(--fg)',dash:'7 5',hollow:true}]);
     hover(f,j=>{const x=d[j];return `<div class="h">${NOME[i]} · ${CAT[j]} · ${r} km</div>`+row(swLn('var(--fg)'),'À venda',f0(x.a_venda))+row(swLn('var(--fg)','d'),'Vendidas',f0(x.vendidas))+row(swSq(COR[i]),'Estoque no fim',f0(x.estoque_fim))+row('','VSO do semestre',fp(x.vso))+row('','Vendas por mês',f0(x.vend_mes))+row('','Empreendimentos com oferta',x.emps)})});
   table(m,['',...CAT],[[ 'À venda',...d.map(x=>f0(x.a_venda))],['Vendidas',...d.map(x=>f0(x.vendidas))],['Estoque no fim',...d.map(x=>f0(x.estoque_fim))]]);}))}
+
+// 2b lançadas × vendidas (pedido do Moises, 17/nov/2026)
+{const hi=Math.max(1,maxOf(d=>d.lanc.map(x=>x.unid)),maxOf(d=>d.sem.map(x=>x.vendidas)))*1.08, lo=Math.min(0,minOf(d=>d.sem.map(x=>x.vendidas)));
+cols('lancvend',(c,r)=>SC.forEach((s,i)=>{const m=document.createElement('div');m.className='mini';m.innerHTML=`<div class="t"><span class="sq" style="background:${COR[i]}"></span>${NOME[i]}</div>`;c.appendChild(m);
+  const L=g(s,r).lanc.map(x=>x.unid),V=g(s,r).sem.map(x=>x.vendidas);const div=chartDiv(m);reg(div,()=>{const f=frame(div,{h:200,lo,hi,yfmt:f0});
+    lines(f,[{v:L,c:COR[i]},{v:V,c:'var(--fg)',dash:'7 5',hollow:true}]);
+    hover(f,j=>`<div class="h">${NOME[i]} · ${CAT[j]} · ${r} km</div>`+row(swLn(COR[i]),'Lançadas',f0(L[j]))+row(swLn('var(--fg)','d'),'Vendidas',f0(V[j]))+row('','Lançadas − vendidas',f0(L[j]-V[j])))});
+  table(m,['',...CAT,'Total'],[['Lançadas',...L.map(f0),`<b>${f0(L.reduce((a,b)=>a+b,0))}</b>`],['Vendidas',...V.map(f0),`<b>${f0(V.reduce((a,b)=>a+b,0))}</b>`]]);}))}
 
 // 3 preço nominal
 {const vals=RAIOS.flatMap(r=>SC.flatMap(s=>g(s,r).sem.flatMap(x=>[x.rs_m2_vendido,g(s,r).sem[0].rs_m2_vendido*x.incc_idx/100])));
